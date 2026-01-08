@@ -2,10 +2,20 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { useEffect } from 'react'
 
-// Test de commit
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await fetch('http://localhost:5000/api/users');
+      const data = await res.json();
+      setUsers(data.users);
+    };
+    fetchUsers();
+  }, []);
 
   return (
     <>
@@ -19,16 +29,15 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <h2>Users</h2>
+        <ul>
+          {users.map((user) => (
+            <li key={user.id}>
+              {user.name}
+            </li>
+          ))}
+        </ul>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
