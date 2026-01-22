@@ -6,6 +6,6 @@ import Profile from './screens/perfil/Perfil.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Profile />
+    <App />
   </StrictMode>,
 )

@@ -1,12 +1,12 @@
 // App.js
+import React from 'react';
 import {
     BrowserRouter as Router,
     Route,
     Routes
 } from 'react-router-dom';
-// Pantalles
-import HomeScreen from './screens/home/Home.jsx'
-import PerfilScreen from './screens/perfil/Perfil.jsx'
+import AppScreen from '../App.jsx'
+import './App.css';
 
 const App = () => {
     return (
@@ -14,15 +14,11 @@ const App = () => {
             <div className="app">
                 <Routes>
                     <Route path="/"
-                        element={<HomeScreen/>} 
-                    />
-                    <Route path="/perfil"
-                        element={<PerfilScreen/>} 
+                        element={<AppScreen/>} 
                     />
                 </Routes>
             </div>
         </Router>
     );
 };
-
 export default App;
