@@ -6,7 +6,7 @@ function Perfil() {
     <>
       <div>
         <h1>Perfil</h1>
-        <img src={profileLogo} alt="Foto de perfil" />
+        <img src={profileLogo} className="w-md" alt="Foto de perfil" />
       </div>
     </>
   )
