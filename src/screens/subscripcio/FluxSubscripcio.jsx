@@ -18,11 +18,11 @@ export default function FluxSubscripcio() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Estat del flux (ho guardarem ací, més endavant pot anar a context)
+  // Dades del flux de subscripió
   const [flowData, setFlowData] = useState({
-    planId: null, // "basic" | "standard" | "premium"
-    billingCycle: "monthly", // "monthly" | "yearly"
-    paymentMethod: "card", // "card" | "paypal" (simulat)
+    planId: null, // Pla seleccionat
+    billingCycle: "monthly", // Cicle de pagament
+    paymentMethod: "card", // Metode de pagament
     cardLast4: "",
     acceptedTerms: false,
   });
