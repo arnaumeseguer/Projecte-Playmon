@@ -7,7 +7,8 @@ import {
 // Pantalles
 import HomeScreen from './screens/home/Home.jsx'
 import PerfilScreen from './screens/perfil/Perfil.jsx'
-import Header from './components/Header.jsx'
+import LoginSingup from './screens/login/LoginSingup.jsx'
+import AdminDashboard from './screens/Admin/Dashboard.jsx'
 
 const App = () => {
   return (
@@ -20,8 +21,11 @@ const App = () => {
           <Route path="/perfil"
             element={<PerfilScreen />}
           />
-          <Route path="/header"
-            element={<Header />}
+          <Route path="/login"
+            element={<LoginSingup />}
+          />
+          <Route path="/dashboard"
+            element={<AdminDashboard />}
           />
         </Routes>
       </div>
