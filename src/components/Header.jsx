@@ -36,15 +36,19 @@ function Header() {
         }
     ]
     return (
-        <div className='flex items-center justify-between p-5'>
-            <div className='flex gap-8 items-center'>
-                <img src={logo} className="w-[80px]
-                md:w-[115px] object-cover"/>
-                <div className='hidden md:flex gap-5'>
-                    {menu.map((item, index) => (
-                        <HeaderItem key={index} name={item.name} Icon={item.icon} />
-                    ))}
-                </div>
+        <div className='relative flex items-center justify-between px-6 py-4 bg-gradient-to-b from-black to-transparent'>
+            {/* Logo */}
+            <img src={logo} className="w-[80px] md:w-[100px] object-contain z-10" />
+
+            {/* Desktop Nav — centrat absolut */}
+            <div className='hidden md:flex gap-6 absolute left-1/2 -translate-x-1/2 items-center'>
+                {menu.map((item, index) => (
+                    <HeaderItem key={index} name={item.name} Icon={item.icon} />
+                ))}
+            </div>
+
+            {/* Mobile Nav */}
+            <div className='flex md:hidden gap-6 items-center'>
                 <div className='flex md:hidden gap-8'>
                     {menu.map((item, index) => index < 3 && (
                         <HeaderItem key={index} name={''} Icon={item.icon} />
