@@ -16,7 +16,7 @@ import ProductionHous from './components/ProductionHous.jsx'
 const App = () => {
   return (
     <Router>
-      <div className="app">
+      <div className="app min-h-screen" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #111111 40%, #0d0a00 70%, #1a0f00 100%)' }}>
         <Header />
         <Slider />
         <ProductionHous />
