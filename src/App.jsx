@@ -4,10 +4,10 @@ import {
   Routes,
   Navigate
 } from 'react-router-dom';
+
 // Pantalles
-import HomeScreen from '@/screens/home/Home.jsx'
-import LoginSingup from '@/screens/login/LoginSingup.jsx'
-import AdminDashboard from '@/screens/Admin/Dashboard.jsx'
+import LoginSingup from '@/features/login/LoginSingup.jsx'
+import AdminDashboard from '@/features/Admin/Dashboard'
 import CompteLayout from '@/features/compte/perfil/routes/CompteLayout.jsx';
 import CompteInici from "@/features/compte/perfil/pages/compte/CompteInici.jsx";
 import CompteInformacioPersonal from "@/features/compte/perfil/pages/compte/CompteInformacioPersonal.jsx";
