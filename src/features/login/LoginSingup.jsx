@@ -72,7 +72,7 @@ export const LoginSingup = () => {
             await login(form.email.trim(), form.password);
 
             setFeedback({ type: "success", text: "Sessió iniciada. Redirigint.." });
-            const redirectPath = getRedirectPath();
+            const redirectPath = getRedirectPath() || "/";
             navigate(redirectPath);
         } catch (e) {
             setFeedback({ type: "error", text: e?.message || "Error fent login" });

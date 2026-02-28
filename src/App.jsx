@@ -18,6 +18,9 @@ import ComptePrivadesa from "@/features/compte/perfil/pages/compte/ComptePrivade
 import ComptePagaments from "@/features/compte/perfil/pages/compte/ComptePagaments.jsx";
 import NotFound from '@/screens/NotFound/NotFound.jsx';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
+import Header from './components/Header';
+import Slider from './components/Slider';
+import ProductionHous from './components/ProductionHous';
 
 const App = () => {
   return (
@@ -25,7 +28,15 @@ const App = () => {
       <div className="app">
         <Routes>
           <Route path="/"
-            element={<LoginSingup />}
+            element={
+              <ProtectedRoute element={
+                <>
+                  <Header />
+                  <Slider />
+                  <ProductionHous />
+                </>
+              } />
+            }
           />
           
           <Route path="/compte" element={<ProtectedRoute element={<CompteLayout />} />}>
