@@ -60,3 +60,63 @@ export function updateCurrentUser(patch) {
 export function isLoggedIn() {
     return !!getToken();
 }
+
+export function getUserFromToken(token = getToken()) {
+    if (!token) return null;
+    try {
+        const [, payloadBase64] = token.split(".");
+        if (!payloadBase64) return null;
+
+        const normalized = payloadBase64.replace(/-/g, "+").replace(/_/g, "/");
+        const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
+        const payloadJson = atob(padded);
+        const payload = JSON.parse(payloadJson);
+
+        const nowInSeconds = Math.floor(Date.now() / 1000);
+        if (payload?.exp && payload.exp < nowInSeconds) return null;
+
+        return {
+            id: payload?.id ?? null,
+            username: payload?.username ?? "",
+            email: payload?.email ?? "",
+            role: payload?.role ?? "user",
+        };
+    } catch {
+        return null;
+    }
+}
+
+export async function ensureCurrentUser() {
+    const token = getToken();
+    if (!token) return null;
+
+    const currentUser = getCurrentUser();
+    if (currentUser) return currentUser;
+
+    const userFromToken = getUserFromToken(token);
+    if (userFromToken) {
+        localStorage.setItem(USER_KEY, JSON.stringify(userFromToken));
+    }
+
+    try {
+        const userFromApi = await fetchCurrentUserData();
+        return userFromApi || userFromToken;
+    } catch {
+        return userFromToken;
+    }
+}
+
+export async function fetchCurrentUserData() {
+    try {
+        const data = await httpClient("/users/me", {
+            method: "GET",
+        });
+        if (data) {
+            localStorage.setItem(USER_KEY, JSON.stringify(data));
+        }
+        return data;
+    } catch (e) {
+        console.error("Error fetching user data:", e);
+        throw e;
+    }
+}

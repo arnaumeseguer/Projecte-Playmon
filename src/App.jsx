@@ -16,6 +16,7 @@ import CompteContrasenya from "@/features/compte/perfil/pages/compte/CompteContr
 import CompteConnexions from "@/features/compte/perfil/pages/compte/CompteConnexions.jsx";
 import ComptePrivadesa from "@/features/compte/perfil/pages/compte/ComptePrivadesa.jsx";
 import ComptePagaments from "@/features/compte/perfil/pages/compte/ComptePagaments.jsx";
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 const App = () => {
   return (
@@ -26,7 +27,7 @@ const App = () => {
             element={<LoginSingup />}
           />
           
-          <Route path="/compte" element={<CompteLayout />}>
+          <Route path="/compte" element={<ProtectedRoute element={<CompteLayout />} />}>
             <Route index element={<Navigate to="inici" replace />} />
             <Route path="inici" element={<CompteInici />} />
             <Route path="informacio-personal" element={<CompteInformacioPersonal />} />
@@ -41,7 +42,7 @@ const App = () => {
             element={<LoginSingup />}
           />
           <Route path="/dashboard"
-            element={<AdminDashboard />}
+            element={<ProtectedRoute element={<AdminDashboard />} />}
           />
         </Routes>
       </div>

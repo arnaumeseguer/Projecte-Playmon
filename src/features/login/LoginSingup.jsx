@@ -4,6 +4,7 @@ import { TbLockPassword } from "react-icons/tb";
 import { MdAlternateEmail } from "react-icons/md";
 import { IoMdContact } from "react-icons/io";
 import { login, register } from "../../api/authApi";
+import { getRedirectPath } from "../../components/ProtectedRoute";
 
 export const LoginSingup = () => {
     const [action, setAction] = useState("Iniciar Sessió"); // o "Registrarse"
@@ -71,7 +72,8 @@ export const LoginSingup = () => {
             await login(form.email.trim(), form.password);
 
             setFeedback({ type: "success", text: "Sessió iniciada. Redirigint.." });
-            navigate("/compte/inici");
+            const redirectPath = getRedirectPath();
+            navigate(redirectPath);
         } catch (e) {
             setFeedback({ type: "error", text: e?.message || "Error fent login" });
         } finally {
