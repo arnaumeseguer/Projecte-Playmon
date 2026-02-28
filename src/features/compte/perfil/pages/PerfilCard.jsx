@@ -23,14 +23,16 @@ export default function PerfilCard({
 
       {/* Avatar + nom/email centrats */}
       <div className="mt-2 flex flex-col items-center text-center">
-        <div className="relative h-20 w-20 overflow-hidden rounded-full bg-white/10 ring-1 ring-white/10">
-          {avatar ? (
-            <img src={avatar} alt="Foto de perfil" className="h-full w-full object-cover" />
-          ) : (
-            <div className="grid h-full w-full place-items-center text-xs font-semibold text-white/70">
-              {nom.slice(0, 2).toUpperCase()}
-            </div>
-          )}
+        <div className="relative inline-block">
+          <div className="h-20 w-20 overflow-hidden rounded-full bg-white/10 ring-1 ring-white/10">
+            {avatar ? (
+              <img src={avatar} alt="Foto de perfil" className="h-full w-full object-cover" />
+            ) : (
+              <div className="grid h-full w-full place-items-center text-xs font-semibold text-white/70">
+                {nom.slice(0, 2).toUpperCase()}
+              </div>
+            )}
+          </div>
 
           {/* Càmera a sobre (com Google) */}
           <button
@@ -38,7 +40,7 @@ export default function PerfilCard({
             title="Canviar foto"
             aria-label="Canviar foto"
             onClick={onChangePhoto}
-            className="absolute -bottom-1 -right-1 grid h-8 w-8 place-items-center rounded-full bg-[#202124] ring-1 ring-white/20 hover:bg-white/10"
+            className="absolute -bottom-1 -right-1 z-50 grid h-8 w-8 place-items-center rounded-full bg-[#202124] ring-1 ring-white/20 hover:bg-white/10"
           >
             {cameraIcon ? (
               <img src={cameraIcon} alt="" className="h-4 w-4 opacity-90" />
