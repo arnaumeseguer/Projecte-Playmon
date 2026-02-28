@@ -16,7 +16,7 @@ import CompteContrasenya from "@/features/compte/perfil/pages/compte/CompteContr
 import CompteConnexions from "@/features/compte/perfil/pages/compte/CompteConnexions.jsx";
 import ComptePrivadesa from "@/features/compte/perfil/pages/compte/ComptePrivadesa.jsx";
 import ComptePagaments from "@/features/compte/perfil/pages/compte/ComptePagaments.jsx";
-import NotFound from '@/screens/NotFound/NotFound.jsx';
+import NotFound from '@/features/NotFound/NotFound.jsx';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import Header from './components/Header';
 import Slider from './components/Slider';

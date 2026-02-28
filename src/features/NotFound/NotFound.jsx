@@ -17,11 +17,11 @@ export default function NotFound() {
 
                 {/* Message */}
                 <h1 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-br from-white to-gray-400 bg-clip-text text-transparent">
-                    Pàgina No Trobada
+                    Per aquí no és.
                 </h1>
                 
                 <p className="text-gray-400 text-lg mb-8 max-w-md mx-auto">
-                    Ho sentim, la pàgina que busques no existeix o ha estat moguda.
+                    Pareix que t'has desviat.
                 </p>
 
                 {/* Action Buttons */}
