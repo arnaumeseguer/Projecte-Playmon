@@ -205,16 +205,33 @@ export default function ModalCanviarAvatar({
               {onEliminar ? (
                 <button
                   type="button"
-                  onClick={() => {
-                    onEliminar();
-                    mostraToast({
-                      tipus: "info",
-                      titol: "Avatar eliminat",
-                      missatge: "Has eliminat la foto de perfil.",
-                      duracio: 2500,
-                    });
-                    onTancar?.();
+                  onClick={async () => {
+                    try {
+                      setGuardant(true);
+                      setError("");
+
+                      await onEliminar();
+                      mostraToast({
+                        tipus: "info",
+                        titol: "Avatar eliminat",
+                        missatge: "Has eliminat la foto de perfil.",
+                        duracio: 2500,
+                      });
+                      onTancar?.();
+                    } catch (err) {
+                      const m = err?.message ?? "No s'ha pogut eliminar l'avatar.";
+                      setError(m);
+                      mostraToast({
+                        tipus: "error",
+                        titol: "Error eliminant l'avatar",
+                        missatge: m,
+                        duracio: 4500,
+                      });
+                    } finally {
+                      setGuardant(false);
+                    }
                   }}
+                  disabled={guardant}
                   className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-slate-900 ring-1 ring-black/10 hover:bg-slate-50"
                 >
                   Eliminar foto

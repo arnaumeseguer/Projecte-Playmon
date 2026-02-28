@@ -3,7 +3,7 @@ import PerfilCard from "@/features/compte/perfil/pages/PerfilCard";
 import ModalEditarPerfil from "@/features/compte/perfil/pages/compte/ModelEditarPerfil";
 import ModalCanviarAvatar from "@/features/compte/perfil/pages/compte/ModelEditarAvatar";
 import { getCurrentUser, updateCurrentUser } from "@/api/authApi";
-import { uploadAvatar } from "@/api/usersApi";
+import { uploadAvatar, deleteAvatar } from "@/api/usersApi";
 
 import defaultAvatar from "@/assets/perfilDefecte.png";
 import CameraIcon from "@/assets/camera_icon.svg";
@@ -47,7 +47,13 @@ export default function CompteInici() {
     updateCurrentUser({ avatar: avatar_url });
   };
 
-  const eliminarAvatar = () => {
+  const eliminarAvatar = async () => {
+    const authUser = getCurrentUser();
+    if (!authUser?.id) {
+      throw new Error("User not authenticated");
+    }
+
+    await deleteAvatar(authUser.id);
     setUser((prev) => ({ ...prev, avatar: null }));
     updateCurrentUser({ avatar: null });
   };

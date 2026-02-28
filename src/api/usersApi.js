@@ -43,3 +43,9 @@ export async function uploadAvatar(userId, file) {
 
     return data;
 }
+
+export async function deleteAvatar(userId) {
+    return httpClient(`/users/${userId}/avatar`, {
+        method: "DELETE",
+    });
+}
