@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { TbLockPassword } from "react-icons/tb";
 import { MdAlternateEmail } from "react-icons/md";
 import { IoMdContact } from "react-icons/io";
+import { login, register } from "../../api/authApi";
+import { getRedirectPath } from "../../components/ProtectedRoute";
 
 export const LoginSingup = () => {
     const [action, setAction] = useState("Iniciar Sessió"); // o "Registrarse"
@@ -18,9 +20,6 @@ export const LoginSingup = () => {
     // UI state
     const [loading, setLoading] = useState(false);
     const [feedback, setFeedback] = useState({ type: "", text: "" }); // type: success|error|info
-
-    // Base URL API (si vols, canvia-ho a un .env de Vite: VITE_API_BASE_URL)
-    const API_BASE = "https://playmonserver.vercel.app";
 
     const isRegister = action === "Registrarse";
 
@@ -44,26 +43,13 @@ export const LoginSingup = () => {
         setFeedback({ type: "", text: "" });
 
         try {
-            const res = await fetch(`${API_BASE}/api/users`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username: form.username.trim(),
-                    name: form.username.trim(),
-                    email: form.email.trim(),
-                    role: "user",
-                    password: form.password,
-                }),
-            });
-
-            const data = await res.json().catch(() => ({}));
-
-            if (!res.ok) {
-                throw new Error(data?.error || `HTTP ${res.status}`);
-            }
+            const data = await register(
+                form.username.trim(),
+                form.email.trim(),
+                form.password
+            );
 
             setFeedback({ type: "success", text: `Usuari creat! (id: ${data.id ?? "?"})` });
-            // opcional: passar a login automàticament
             setAction("Iniciar Sessió");
             setForm({ username: "", email: "", password: "" });
         } catch (e) {
@@ -75,7 +61,7 @@ export const LoginSingup = () => {
 
     const submitLogin = async () => {
         if (!canSubmit) {
-            setFeedback({ type: "error", text: "Omple email i contrasenya." });
+            setFeedback({ type: "error", text: "Omple usuari/email i contrasenya." });
             return;
         }
 
@@ -83,26 +69,11 @@ export const LoginSingup = () => {
         setFeedback({ type: "", text: "" });
 
         try {
-            const res = await fetch(`${API_BASE}/api/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    email: form.email.trim(),
-                    password: form.password,
-                }),
-            });
-
-            const data = await res.json().catch(() => ({}));
-
-            if (!res.ok) {
-                throw new Error(data?.error || `HTTP ${res.status}`);
-            }
-
-            //Potser caldria guardar token
+            await login(form.email.trim(), form.password);
 
             setFeedback({ type: "success", text: "Sessió iniciada. Redirigint.." });
-            // aquí normalment guardariem token i navegariem
-        navigate("/perfil");
+            const redirectPath = getRedirectPath() || "/";
+            navigate(redirectPath);
         } catch (e) {
             setFeedback({ type: "error", text: e?.message || "Error fent login" });
         } finally {
@@ -179,10 +150,10 @@ export const LoginSingup = () => {
                     <div className="flex items-center bg-black/40 border border-white/5 rounded-xl px-4 py-3 transition-all focus-within:border-[#CC8400]/50 focus-within:bg-black/60 group">
                         <MdAlternateEmail className="text-2xl text-gray-400 group-focus-within:text-[#CC8400] transition-colors" />
                         <input
-                            type="email"
+                            type={isRegister ? "email" : "text"}
                             value={form.email}
                             onChange={setField("email")}
-                            placeholder="Correu Electronic"
+                            placeholder={isRegister ? "Correu Electronic" : "Usuari o Email"}
                             className="bg-transparent border-none outline-none text-white pl-4 w-full placeholder-gray-500 font-medium"
                         />
                     </div>
