@@ -70,7 +70,7 @@ const customSelectStyles = {
   })
 };
 
-const PaymentForm = ({ onCancel, onSuccess, selectedPlan }) => {
+const PaymentForm = ({ onCancel, onSuccess, selectedPlan, loading: isExternalLoading }) => {
   const [form, setForm] = useState({
     holder: "",
     cardNumber: "",
@@ -82,7 +82,7 @@ const PaymentForm = ({ onCancel, onSuccess, selectedPlan }) => {
   });
 
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const isSubmitting = isExternalLoading;
 
   const formatCardNumber = (value) => {
     const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
@@ -138,13 +138,9 @@ const PaymentForm = ({ onCancel, onSuccess, selectedPlan }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-
-    setIsSubmitting(true);
-    // Simulem petició API
-    setTimeout(() => {
-      setIsSubmitting(false);
-      onSuccess?.();
-    }, 2000);
+    
+    // Notify parent to perform the real API call
+    onSuccess?.();
   };
 
   return (

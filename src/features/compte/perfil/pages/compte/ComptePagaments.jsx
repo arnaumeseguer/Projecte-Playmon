@@ -2,19 +2,38 @@ import { useState } from "react";
 import SubscriptionPlans from "@/features/subscriptions/SubscriptionPlans";
 import PaymentForm from "@/features/subscriptions/PaymentForm";
 import { FiCheckCircle, FiArrowLeft } from "react-icons/fi";
+import { updateUserSubscription } from "@/api/usersApi";
+import { getCurrentUser, updateCurrentUser } from "@/api/authApi";
 
 export default function ComptePagaments() {
   const [step, setStep] = useState("plans"); // plans | payment | success
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handlePlanSelect = (plan) => {
     setSelectedPlan(plan);
     setStep("payment");
   };
 
-  const handlePaymentSuccess = () => {
-    setStep("success");
-    // Aquí es podria cridar a l'API per actualitzar l'estat real
+  const handlePaymentSuccess = async () => {
+    const user = getCurrentUser();
+    if (!user || !selectedPlan) return;
+
+    setLoading(true);
+    try {
+      // API call to backend
+      const updatedUser = await updateUserSubscription(user.id, selectedPlan.title);
+      
+      // Update local storage/state with the full updated user object
+      updateCurrentUser(updatedUser);
+      
+      setStep("success");
+    } catch (error) {
+      console.error("Error updating subscription:", error);
+      alert("Error al processar el pagament en el servidor");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (step === "success") {
@@ -60,6 +79,7 @@ export default function ComptePagaments() {
             selectedPlan={selectedPlan} 
             onCancel={() => setStep("plans")} 
             onSuccess={handlePaymentSuccess} 
+            loading={loading}
           />
         </div>
       )}
