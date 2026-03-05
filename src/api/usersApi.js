@@ -57,7 +57,7 @@ export async function updateUserSubscription(userId, plan) {
     return httpClient(`/users/${userId}`, {
         method: "PUT",
         body: JSON.stringify({
-            subscription_plan: normalizedPlan,
+            pla_pagament: normalizedPlan,
         }),
     });
 }
