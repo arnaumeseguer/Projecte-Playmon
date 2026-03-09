@@ -7,28 +7,30 @@ export default function PerfilCard({
   const nom = user?.name ?? "Usuari";
   const correu = user?.email ?? "";
   const avatar = user?.avatar ?? null;
+  const username = user?.username ?? "@nomusuari";
+  const plan = user?.plan ?? "Gratuït";
 
   return (
-    <section className="rounded-3xl bg-[#1f1f1f] px-6 py-10 ring-1 ring-white/10">
+    <section className="w-full rounded-3xl bg-[#1f1f1f] px-6 py-12 sm:px-12 sm:py-16 ring-1 ring-white/10 shadow-2xl">
       {/* Acció d'editar nom de perfil */}
-      <div className="flex justify-end">
+      <div className="flex justify-end mb-6">
         <button
           type="button"
           onClick={onEditProfile}
-          className="rounded-full bg-white/10 px-5 py-2 text-sm font-semibold text-white hover:bg-white/15"
+          className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/15 transition-colors"
         >
           Editar perfil
         </button>
       </div>
 
-      {/* Avatar + nom/email centrats */}
-      <div className="mt-2 flex flex-col items-center text-center">
-        <div className="relative inline-block">
-          <div className="h-20 w-20 overflow-hidden rounded-full bg-white/10 ring-1 ring-white/10">
+      {/* Avatar + camps centrats */}
+      <div className="flex flex-col items-center">
+        <div className="relative inline-block mb-10">
+          <div className="h-48 w-48 sm:h-56 sm:w-56 overflow-hidden rounded-full bg-white/5 ring-4 ring-white/10 shadow-2xl">
             {avatar ? (
               <img src={avatar} alt="Foto de perfil" className="h-full w-full object-cover" />
             ) : (
-              <div className="grid h-full w-full place-items-center text-xs font-semibold text-white/70">
+              <div className="grid h-full w-full place-items-center text-6xl font-semibold text-white/50">
                 {nom.slice(0, 2).toUpperCase()}
               </div>
             )}
@@ -40,29 +42,50 @@ export default function PerfilCard({
             title="Canviar foto"
             aria-label="Canviar foto"
             onClick={onChangePhoto}
-            className="absolute -bottom-1 -right-1 z-50 grid h-8 w-8 place-items-center rounded-full bg-[#202124] ring-1 ring-white/20 hover:bg-white/10"
+            className="absolute bottom-2 right-2 z-50 grid h-14 w-14 place-items-center rounded-full bg-[#202124] ring-4 ring-[#1f1f1f] hover:bg-white/20 transition-all shadow-xl"
           >
             {cameraIcon ? (
-              <img src={cameraIcon} alt="" className="h-4 w-4 opacity-90" />
+              <img src={cameraIcon} alt="" className="h-7 w-7 opacity-90" />
             ) : (
-              <span className="text-xs">📷</span>
+              <span className="text-2xl">📷</span>
             )}
           </button>
         </div>
 
-        <h2 className="mt-5 text-3xl font-semibold tracking-tight text-white">
-          {nom}
-        </h2>
-        <p className="mt-1 text-sm text-white/70">{correu}</p>
+        {/* Camps d'informació */}
+        <div className="w-full max-w-3xl space-y-5">
+          <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
+            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Nom</span>
+            <span className="text-xl sm:text-2xl font-semibold text-white">{nom}</span>
+          </div>
+          
+          <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
+            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Nom d'usuari</span>
+            <span className="text-xl sm:text-2xl font-semibold text-white">{username}</span>
+          </div>
+
+          <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
+            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Correu electrònic</span>
+            <span className="text-xl sm:text-2xl font-semibold text-white truncate">{correu}</span>
+          </div>
+
+          <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
+            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Pla de subscripció</span>
+            <span className="flex items-center gap-3 text-xl sm:text-2xl font-semibold text-white">
+              <span className={`h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full ${plan.toLowerCase() === 'premium' || plan.toLowerCase() === 'pro' ? 'bg-yellow-400 shadow-[0_0_12px_rgba(250,204,21,0.6)]' : 'bg-blue-400 shadow-[0_0_12px_rgba(96,165,250,0.6)]'}`}></span>
+              {plan}
+            </span>
+          </div>
+        </div>
 
         {/* Cercador */}
-        <div className="mt-7 w-full max-w-2xl">
-          <div className="flex items-center gap-3 rounded-full bg-white/10 px-5 py-3.5 ring-1 ring-white/10 focus-within:ring-white/20">
+        <div className="mt-12 w-full max-w-3xl">
+          <div className="flex items-center gap-4 rounded-full bg-white/5 px-6 py-4 sm:py-5 ring-1 ring-white/10 focus-within:ring-white/30 focus-within:bg-white/10 transition-all shadow-inner">
             <SearchIcon />
             <input
               type="search"
               placeholder="Cerca al Compte"
-              className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/50"
+              className="w-full bg-transparent text-base sm:text-lg text-white outline-none placeholder:text-white/40"
             />
           </div>
         </div>
