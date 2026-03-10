@@ -1,4 +1,4 @@
-import { VIDEOS_FITXER } from "./videosFitxer";
+import { VIDEOS_FITXER } from "./VideosFitxer";
 
 /** @returns {import("../domini/repositoriVideo.port").RepositoriVideoPort} */
 export function creaRepositoriVideoFixer() {

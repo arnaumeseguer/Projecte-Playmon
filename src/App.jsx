@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 
 // Pantalles
-import PantallaReproduccio from '@/features/reproductor/pages/PantallaReproductor.jsx';
+import PantallaReproduccio from '@/features/reproductor/ui/PantallaReproduccio.jsx';
 import LoginSingup from '@/features/login/LoginSingup.jsx'
 import AdminDashboard from '@/features/Admin/Dashboard'
 import CompteLayout from '@/features/compte/perfil/layout/CompteLayout.jsx';
@@ -23,7 +23,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 import Header from './components/Header';
 import Slider from './components/Slider';
 import ProductionHous from './components/ProductionHous';
-import FluxSubscripcio from '@/features/compte/subscripcio/FluxSubscripcio';
+// import FluxSubscripcio from '@/features/compte/subscripcio/FluxSubscripcio';
 
 const App = () => {
   return (

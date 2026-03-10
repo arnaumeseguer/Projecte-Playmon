@@ -1,5 +1,5 @@
 import { candidatesFonts } from "../../domini/seleccioFont";
-import { creaEnginePerFont } from "../engines/creaEngine";
+import { creaEngineHlsJs } from "../engines/creaEngine";
 
 /**
  * SRP: aquest controlador només:
@@ -41,7 +41,7 @@ export class ControladorPlayer {
     let lastErr = null;
 
     for (const font of candidates) {
-      const engine = creaEnginePerFont({ videoEl: v, font });
+      const engine = creaEngineHlsJs({ videoEl: v, font });
       if (!engine) {
         lastErr = new Error(`No hi ha engine per a ${font.tipus}`);
         continue;

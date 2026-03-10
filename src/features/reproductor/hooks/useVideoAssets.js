@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { creaRepositoriVideoFixer } from "../dades/repositoriVideoFixer";
+import { creaRepositoriVideoFixer } from "../dades/repositoriVideoFitxer";
 
 /**
  * DIP: la UI depèn d’un repositori abstracte; ara usem FIXER.

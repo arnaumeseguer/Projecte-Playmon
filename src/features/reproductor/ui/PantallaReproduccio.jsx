@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useVideoAsset } from "../hooks/useVideoAsset";
+import { useVideoAsset } from "../hooks/useVideoAssets";
 import Reproductor from "./Reproductor";
 
 export default function PantallaReproduccio() {
