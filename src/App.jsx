@@ -20,28 +20,24 @@ import ComptePagaments from "@/features/compte/perfil/pages/compte/ComptePagamen
 import NotFound from '@/features/NotFound/NotFound.jsx';
 import Forbidden from '@/features/Forbidden/Forbidden.jsx';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
-import Header from './components/Header';
-import Slider from './components/Slider';
-import ProductionHous from './components/ProductionHous';
-// import FluxSubscripcio from '@/features/compte/subscripcio/FluxSubscripcio';
+import HomeLayout from '@/features/home/HomeLayout';
+import MovieDetailPage from '@/features/detail/MovieDetailPage';
 
 const App = () => {
   return (
     <Router>
-      <div className="app">
+      <div className="app min-h-screen" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #111111 40%, #0d0a00 70%, #1a0f00 100%)' }}>
         <Routes>
           <Route path="/"
-            element={
-              <ProtectedRoute element={
-                <>
-                  <Header />
-                  <Slider />
-                  <ProductionHous />
-                </>
-              } />
-            }
+            element={<ProtectedRoute element={<HomeLayout />} />}
           />
-          
+          <Route path="/movie/:id"
+            element={<ProtectedRoute element={<MovieDetailPage />} />}
+          />
+          <Route path="/tv/:id"
+            element={<ProtectedRoute element={<MovieDetailPage />} />}
+          />
+
           <Route path="/compte" element={<ProtectedRoute element={<CompteLayout />} />}>
             <Route index element={<Navigate to="inici" replace />} />
             <Route path="inici" element={<CompteInici />} />
@@ -75,7 +71,7 @@ const App = () => {
           <Route path='/reproduccio/:id' element={<PantallaReproduccio />} />
 
           <Route path="/403" element={<Forbidden />} />
-          
+
           {/* Catch-all 404 route - must be last */}
           <Route path="*" element={<NotFound />} />
 

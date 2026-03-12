@@ -42,7 +42,14 @@ function Header() {
     return (
         <div className='relative flex items-center justify-between px-6 py-4 bg-gradient-to-b from-black to-transparent'>
             {/* Logo */}
-            <img src={logo} className="w-[80px] md:w-[100px] object-contain z-10" />
+            <button
+                type="button"
+                onClick={() => navigate('/')}
+                className="z-10 cursor-pointer hover:opacity-85 transition-opacity"
+                aria-label="Go to home"
+            >
+                <img src={logo} className="w-[80px] md:w-[100px] object-contain" alt="Playmon" />
+            </button>
 
             {/* Desktop Nav — centrat absolut */}
             <div className='hidden md:flex gap-6 absolute left-1/2 -translate-x-1/2 items-center'>
