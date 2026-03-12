@@ -7,7 +7,9 @@ export default function CompteInformacioPersonal({onChangePhoto}) {
   const authUser = getCurrentUser();
 
   const user = {
-    nom: authUser?.name ?? authUser?.username ?? "Usuari",
+    nom: authUser?.name ?? "Usuari",
+    usuari: authUser?.username ?? "@usuari",
+    plan: authUser?.pla_pagament ?? "basic",
     emails: authUser?.email ? [authUser.email] : [],
     telefon: authUser?.telefon ?? "No s'ha definit",
     idioma: authUser?.idioma ?? "No s'ha definit",
@@ -17,6 +19,15 @@ export default function CompteInformacioPersonal({onChangePhoto}) {
     avatar: authUser?.avatar ?? defaultAvatar,
     darrerCanviContrasenya: "11 de des. 2022",
   };
+
+  const planMapping = {
+    basic: { color: "text-white", glow: "0 0 4px rgba(255,255,255,0.3)" },
+    super: { color: "text-[#ff9d00]", glow: "0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)" },
+    master: { color: "text-[#a855f7]", glow: "0 0 7px #a855f7, 0 0 14px rgba(168,85,247,0.4)" },
+  };
+  const planInfo = planMapping[user.plan.toLowerCase()] || planMapping.basic;
+  const nameColorClass = planInfo.color;
+  const nameGlowStyle = planInfo.glow;
 
   return (
     <div className="space-y-6">
@@ -39,6 +50,24 @@ export default function CompteInformacioPersonal({onChangePhoto}) {
           valor=""
           avatarDreta={user.avatar}
           onClick={onChangePhoto}
+        />
+
+        <Separador />
+
+        <FilaInfo
+          icona={<IconaUsuari />}
+          titol="Nom d'usuari"
+          valor={
+            <>
+              {user.usuari}
+              {user.plan.toLowerCase() === 'master' && (
+                <span className="ml-2 text-white inline-block drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">★</span>
+              )}
+            </>
+          }
+          valorColorClass={nameColorClass}
+          valorGlowStyle={nameGlowStyle}
+          onClick={() => console.log("Editar nom d'usuari")}
         />
 
         <Separador />
@@ -103,7 +132,7 @@ export default function CompteInformacioPersonal({onChangePhoto}) {
  * Components UI
  * ----------------------------*/
 
-function FilaInfo({ icona, titol, valor, valors, avatarDreta, onClick }) {
+function FilaInfo({ icona, titol, valor, valors, avatarDreta, onClick, valorColorClass, valorGlowStyle }) {
   return (
     <button
       type="button"
@@ -121,8 +150,13 @@ function FilaInfo({ icona, titol, valor, valors, avatarDreta, onClick }) {
           <div className="text-sm font-semibold text-white">{titol}</div>
 
           {/* Un sol valor */}
-          {typeof valor === "string" && valor !== "" ? (
-            <div className="mt-1 text-sm text-white/70">{valor}</div>
+          {(typeof valor === "string" || React.isValidElement(valor)) && valor !== "" ? (
+            <div 
+              className={`mt-1 text-sm ${valorColorClass || "text-white/70"}`}
+              style={valorGlowStyle ? { textShadow: valorGlowStyle } : {}}
+            >
+              {valor}
+            </div>
           ) : null}
 
           {/* Llista de valors */}

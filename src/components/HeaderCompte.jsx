@@ -149,18 +149,40 @@ export default function HeaderCompte({
               aria-haspopup={mostrarMenu ? "menu" : undefined}
               aria-expanded={mostrarMenu ? menuObert : undefined}
             >
-              <span className="hidden text-sm font-semibold text-white/90 sm:block">
-                {nomUsuari}
+              <span 
+                className={`hidden text-sm sm:block transition-all ${
+                  user?.pla_pagament === 'super' ? 'text-[#ff9d00] font-bold' : 
+                  user?.pla_pagament === 'master' ? 'text-[#a855f7] font-black' : 
+                  'text-white font-semibold'
+                }`}
+                style={{
+                  textShadow: user?.pla_pagament === 'super' ? '0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)' : 
+                              user?.pla_pagament === 'master' ? '0 0 7px #a855f7, 0 0 14px rgba(168,85,247,0.4)' : 
+                              '0 0 4px rgba(255,255,255,0.3)'
+                }}
+              >
+                {user?.username || "Usuari"}
+                {user?.pla_pagament === 'master' && (
+                  <span className="ml-1 text-white inline-block drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">★</span>
+                )}
               </span>
 
               {avatarUsuari ? (
                 <img
                   src={avatarUsuari}
                   alt=""
-                  className="h-8 w-8 rounded-full object-cover ring-1 ring-white/20"
+                  className={`h-8 w-8 rounded-full object-cover transition-all ${
+                    user?.pla_pagament === 'super' ? 'ring-2 ring-[#ff9d00]' : 
+                    user?.pla_pagament === 'master' ? 'ring-2 ring-[#a855f7]' : 
+                    'ring-1 ring-white/20'
+                  }`}
                 />
               ) : (
-                <span className="grid h-8 w-8 place-items-center rounded-full bg-white/10 text-xs font-semibold text-white/80 ring-1 ring-white/15">
+                <span className={`grid h-8 w-8 place-items-center rounded-full text-xs font-semibold ring-1 transition-all ${
+                  user?.pla_pagament === 'super' ? 'bg-[#ff9d00]/10 text-[#ff9d00] ring-[#ff9d00]' : 
+                  user?.pla_pagament === 'master' ? 'bg-[#a855f7]/10 text-[#a855f7] ring-[#a855f7]' : 
+                  'bg-white/10 text-white/80 ring-white/15'
+                }`}>
                   {inicials}
                 </span>
               )}
@@ -208,7 +230,15 @@ export default function HeaderCompte({
                   role="menuitem"
                 >
                   Tancar sessió
-                  <span className="text-white/40">↗</span>
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    className="h-4.5 w-4.5 text-white/40 group-hover:text-white/60 transition-colors" 
+                    fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                  >
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                  </svg>
                 </button>
               </div>
             ) : null}

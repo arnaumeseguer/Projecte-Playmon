@@ -75,12 +75,39 @@ function Header() {
                     </div>
                 </div>
             </div>
-            <img 
-                src={user?.avatar || perfilDefecte} 
-                className="w-[40px] h-[40px] rounded-full cursor-pointer object-cover hover:ring-2 hover:ring-[#CC8400] transition-all"
+            <div 
+                className="flex items-center gap-3 cursor-pointer group"
                 onClick={() => navigate('/compte')}
-                alt="Profile"
-            />
+            >
+                <div className="flex items-center gap-1.5">
+                    <span 
+                        className={`text-sm hidden sm:inline-block transition-all ${
+                            user?.pla_pagament === 'super' ? 'text-[#ff9d00] font-bold' : 
+                            user?.pla_pagament === 'master' ? 'text-[#a855f7] font-black' : 
+                            'text-white font-medium'
+                        }`}
+                        style={{
+                            textShadow: user?.pla_pagament === 'super' ? '0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)' : 
+                                        user?.pla_pagament === 'master' ? '0 0 7px #a855f7, 0 0 14px rgba(168,85,247,0.4)' : 
+                                        '0 0 4px rgba(255,255,255,0.3)'
+                        }}
+                    >
+                        {user?.username || "Usuari"}
+                        {user?.pla_pagament === 'master' && (
+                            <span className="ml-1 text-white inline-block drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">★</span>
+                        )}
+                    </span>
+                    <img 
+                        src={user?.avatar || perfilDefecte} 
+                        className={`w-[40px] h-[40px] rounded-full object-cover transition-all ${
+                            user?.pla_pagament === 'super' ? 'ring-2 ring-[#ff9d00]' : 
+                            user?.pla_pagament === 'master' ? 'ring-2 ring-[#a855f7]' : 
+                            'hover:ring-2 hover:ring-[#CC8400]'
+                        }`}
+                        alt="Profile"
+                    />
+                </div>
+            </div>
         </div>
     )
 }
