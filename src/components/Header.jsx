@@ -40,7 +40,7 @@ function Header() {
         }
     ]
     return (
-        <div className='relative flex items-center justify-between px-6 py-4 bg-gradient-to-b from-black to-transparent'>
+        <div className='absolute top-0 w-full z-50 flex items-center justify-between px-6 py-4 bg-gradient-to-b from-black/60 to-transparent'>
             {/* Logo */}
             <button
                 type="button"
