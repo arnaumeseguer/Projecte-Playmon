@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Local Backend URL
-const movieBaseUrl = "http://localhost:5000/api/pelis"
+const movieBaseUrl = "https://playmonserver.vercel.app/api/pelis"
 
 /**
  * Normalizes the local movie schema back into the TMDB format expected by frontend components.
