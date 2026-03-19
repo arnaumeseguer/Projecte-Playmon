@@ -18,7 +18,7 @@ function HeroVideo({ backdrop, trailerKey, title }) {
             ) : (
                 <div className='absolute inset-0'>
                     <img
-                        src={IMAGE_BASE_URL + backdrop}
+                        src={backdrop?.startsWith('http') ? backdrop : IMAGE_BASE_URL + backdrop}
                         alt={title}
                         className='w-full h-full object-cover object-center animate-slow-zoom'
                     />
