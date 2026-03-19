@@ -95,11 +95,16 @@ const getTvDetails = (id) => axios.get(`${movieBaseUrl}/${id}`).then(mapSingle);
 const getTvSeason = (tvId, seasonNum) => axios.get(`${movieBaseUrl}/${tvId}`).then(mapSingle);
 
 
+// Aquesta trucada en lloc de cridar a TMDB, truca al teu futur Servidor Python de la Base de dades.
+// El teu company només haurà de crear al main.py la ruta equivalent a /api/movies/search?query=...
+const searchLocalMovies = (query) => axios.get("http://localhost:8000/api/movies/search?query=" + query);
+
 export default {
     getTrendingVideos,
     getMoviesByGender,
     getMovieDetails,
     getTvDetails,
-    getTvSeason
+    getTvSeason,
+    searchLocalMovies
 }
 
