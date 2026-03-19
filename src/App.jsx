@@ -15,6 +15,7 @@ import CompteSeguretat from "@/features/compte/perfil/pages/compte/CompteSeguret
 import CompteContrasenya from "@/features/compte/perfil/pages/compte/CompteContrasenya.jsx";
 import CompteConnexions from "@/features/compte/perfil/pages/compte/CompteConnexions.jsx";
 import ComptePrivadesa from "@/features/compte/perfil/pages/compte/ComptePrivadesa.jsx";
+import CompteLlista from "@/features/compte/perfil/pages/compte/CompteLlista.jsx";
 import ComptePagaments from "@/features/compte/perfil/pages/compte/ComptePagaments.jsx";
 import NotFound from '@/features/NotFound/NotFound.jsx';
 import Forbidden from '@/features/Forbidden/Forbidden.jsx';
@@ -45,6 +46,7 @@ const App = () => {
             <Route path="contrasenya" element={<CompteContrasenya />} />
             <Route path="connexions" element={<CompteConnexions />} />
             <Route path="privadesa" element={<ComptePrivadesa />} />
+            <Route path="llista" element={<CompteLlista />} />
             <Route path="pagaments" element={<ComptePagaments />} />
           </Route>
 

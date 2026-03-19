@@ -14,6 +14,12 @@ const items = [
     color: "bg-green-100 text-green-700",
   },
   {
+    to: "/compte/llista",
+    label: "Veure més tard",
+    Icon: BookmarkIcon,
+    color: "bg-fuchsia-100 text-fuchsia-700",
+  },
+  {
     to: "/compte/seguretat",
     label: "Seguretat i inici de sessió",
     Icon: LockIcon,
@@ -146,6 +152,13 @@ function CardIcon() {
     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
       <rect x="3" y="5" width="18" height="14" rx="2" />
       <path d="M3 10h18" />
+    </svg>
+  );
+}
+function BookmarkIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
     </svg>
   );
 }

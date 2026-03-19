@@ -32,7 +32,7 @@ function HeroVideo({ backdrop, trailerKey, title }) {
             <div className='absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/60 to-transparent z-20 pointer-events-none' />
 
             {/* Contingut sobre el video */}
-            <div className={`absolute bottom-0 left-0 right-0 z-30 px-6 md:px-16 pb-10 md:pb-16 lg:pb-20 pointer-events-auto
+            <div className={`absolute bottom-0 left-0 right-0 z-30 px-6 md:px-16 pb-24 pointer-events-auto
                             transition-all duration-1000 ease-in-out
                             ${showTrailer ? 'opacity-20 blur-sm hover:opacity-100 hover:blur-none' : 'opacity-100'}`}
             >

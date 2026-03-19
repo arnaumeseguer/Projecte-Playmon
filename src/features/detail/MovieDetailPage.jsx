@@ -124,7 +124,7 @@ function MovieDetailPage() {
                     <div className='flex-1 min-w-0'>
                         {/* Acció buttons */}
                         <div className='mb-6'>
-                            <ActionButtons />
+                            <ActionButtons movie={data} />
                         </div>
 
                         {/* Metadades */}
