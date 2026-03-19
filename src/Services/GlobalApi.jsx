@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Local Backend URL
-const movieBaseUrl = "https://playmonserver.vercel.app/api/pelis"
+const movieBaseUrl = "http://localhost:5000/api/pelis"
 
 /**
  * Normalizes the local movie schema back into the TMDB format expected by frontend components.
@@ -10,7 +10,7 @@ const movieBaseUrl = "https://playmonserver.vercel.app/api/pelis"
  */
 const mapMovie = (m) => {
     if (!m) return m;
-    
+
     // Handle JSON fields (categoria, reparto, direccio)
     // Some DB adapters return strings for JSON columns, others return parsed objects.
     const parseJson = (val) => {
@@ -33,29 +33,29 @@ const mapMovie = (m) => {
         name: m.title || m.name,
         release_date: m.fecha_estreno ? m.fecha_estreno.split('T')[0] : (m.release_date || ''),
         first_air_date: m.fecha_estreno ? m.fecha_estreno.split('T')[0] : (m.first_air_date || ''),
-        
+
         // Genres (expected as array of objects {id, name})
-        genres: Array.isArray(categoria) 
-            ? categoria.map(c => typeof c === 'object' ? c : { id: c, name: String(c) }) 
+        genres: Array.isArray(categoria)
+            ? categoria.map(c => typeof c === 'object' ? c : { id: c, name: String(c) })
             : [],
-        
+
         // Credits (Cast & Crew)
         credits: {
             cast: Array.isArray(reparto) ? reparto : [],
             crew: Array.isArray(direccio) ? direccio : []
         },
-        
+
         // Video / Trailer (Expected as results array)
         videos: {
             results: m.video_url ? [
-                { 
-                    key: m.video_url.includes('v=') ? m.video_url.split('v=')[1].split('&')[0] : m.video_url, 
-                    site: 'YouTube', 
-                    type: 'Trailer' 
+                {
+                    key: m.video_url.includes('v=') ? m.video_url.split('v=')[1].split('&')[0] : m.video_url,
+                    site: 'YouTube',
+                    type: 'Trailer'
                 }
             ] : []
         },
-        
+
         // Empty stubs for non-migrated features
         recommendations: { results: [] },
         similar: { results: [] },
@@ -66,19 +66,19 @@ const mapMovie = (m) => {
 // Wraps list response in { results: [...] } to match TMDB structure
 const mapResults = (res) => {
     const rawData = Array.isArray(res.data) ? res.data : (res.data.results || []);
-    return { 
+    return {
         ...res,
-        data: { 
-            results: rawData.map(mapMovie) 
-        } 
+        data: {
+            results: rawData.map(mapMovie)
+        }
     };
 };
 
 // Maps single object response
 const mapSingle = (res) => {
-    return { 
+    return {
         ...res,
-        data: mapMovie(res.data) 
+        data: mapMovie(res.data)
     };
 };
 
@@ -94,16 +94,6 @@ const getTvDetails = (id) => axios.get(`${movieBaseUrl}/${id}`).then(mapSingle);
 
 const getTvSeason = (tvId, seasonNum) => axios.get(`${movieBaseUrl}/${tvId}`).then(mapSingle);
 
-const getMovieDetails = (id) => axios.get(movieBaseUrl +
-    "/movie/" + id + "?api_key=" + api_key +
-    "&append_to_response=credits,videos,similar,recommendations&language=es-ES");
-
-const getTvDetails = (id) => axios.get(movieBaseUrl +
-    "/tv/" + id + "?api_key=" + api_key +
-    "&append_to_response=credits,videos,similar,recommendations&language=es-ES");
-
-const getTvSeason = (tvId, seasonNum) => axios.get(movieBaseUrl +
-    "/tv/" + tvId + "/season/" + seasonNum + "?api_key=" + api_key + "&language=es-ES");
 
 export default {
     getTrendingVideos,
