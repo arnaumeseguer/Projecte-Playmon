@@ -108,7 +108,9 @@ function Slider() {
                                     style={{ width: `${ITEM_W}%` }}
                                 >
                                     <img
-                                        src={IMAGE_BASE_URL + movie?.backdrop_path}
+                                        src={movie?.backdrop_path?.startsWith('http') 
+                                            ? movie.backdrop_path 
+                                            : IMAGE_BASE_URL + movie?.backdrop_path}
                                         className='w-full h-full object-cover object-center'
                                         style={{
                                             filter: isCurrent
