@@ -40,10 +40,12 @@ function Header() {
         {
             name: "PELICULES",
             icon: HiPlayCircle,
+            path: "/pelicules"
         },
         {
             name: "SERIES",
             icon: HiTv,
+            path: "/series"
         }
     ]
     return (

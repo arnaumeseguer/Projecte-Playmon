@@ -94,6 +94,14 @@ const getTvDetails = (id) => axios.get(`${movieBaseUrl}/${id}`).then(mapSingle);
 
 const getTvSeason = (tvId, seasonNum) => axios.get(`${movieBaseUrl}/${tvId}`).then(mapSingle);
 
+// Fil’trats per tipus (apunten a les taules separades del backend)
+const seriesBaseUrl = "https://playmonserver.vercel.app/api/series"
+const getMovies   = () => axios.get(movieBaseUrl).then(mapResults);
+const getSeries   = () => axios.get(seriesBaseUrl).then((res) => {
+    const rawData = Array.isArray(res.data) ? res.data : (res.data.results || []);
+    return { ...res, data: { results: rawData.map(m => ({ ...mapMovie(m), media_type: 'tv' })) } };
+});
+
 
 // Aquesta trucada en lloc de cridar a TMDB, truca al teu futur Servidor Python de la Base de dades.
 // El teu company només haurà de crear al main.py la ruta equivalent a /api/movies/search?query=...
@@ -105,6 +113,7 @@ export default {
     getMovieDetails,
     getTvDetails,
     getTvSeason,
+    getMovies,
+    getSeries,
     searchLocalMovies
 }
-
