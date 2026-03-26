@@ -17,6 +17,7 @@ function MovieDetailPage() {
     const navigate = useNavigate()
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [related, setRelated] = useState([])
     const [activeTab, setActiveTab] = useState('related')
 
     const isTv = location.pathname.startsWith('/tv')
@@ -33,6 +34,13 @@ function MovieDetailPage() {
             .then(resp => setData(resp.data))
             .catch(err => console.error(err))
             .finally(() => setLoading(false))
+
+        // Si és peli (no sèrie), obtenim relacionats del backend local
+        if (!isTv) {
+            GlobalApi.getRelated(id)
+                .then(res => setRelated(res?.data?.results || []))
+                .catch(() => setRelated([]))
+        }
 
         window.scrollTo(0, 0)
     }, [id, isTv])
@@ -64,9 +72,10 @@ function MovieDetailPage() {
     const crew = data.credits?.crew || []
     const trailerKey = data.videos?.results?.find(v => v.type === 'Trailer' && v.site === 'YouTube')?.key
         || data.videos?.results?.find(v => v.site === 'YouTube')?.key
-    const related = data.recommendations?.results?.length > 0
-        ? data.recommendations.results
-        : data.similar?.results || []
+    const related_local = related.length > 0 ? related
+        : (data.recommendations?.results?.length > 0
+            ? data.recommendations.results
+            : data.similar?.results || [])
     const seasons = data.seasons || []
 
     // Calificació d'edat simulada basada en adult flag i gèneres
@@ -190,7 +199,7 @@ function MovieDetailPage() {
                         {/* Contingut del tab */}
                         <div className='pb-16'>
                             {activeTab === 'related' && (
-                                <RelatedContent movies={related} />
+                                <RelatedContent movies={related_local} />
                             )}
 
                             {activeTab === 'details' && (
