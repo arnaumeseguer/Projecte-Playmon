@@ -16,7 +16,7 @@ export default function CompteInici() {
       email: authUser?.email ?? "",
       avatar: authUser?.avatar ?? defaultAvatar,
       username: authUser?.username ?? "",
-      plan: authUser?.role === "premium" ? "Premium" : (authUser?.plan ?? "Gratuït"),
+      plan: authUser?.pla_pagament ?? "basic",
     };
   });
 

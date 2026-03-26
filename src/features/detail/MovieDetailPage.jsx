@@ -91,7 +91,7 @@ function MovieDetailPage() {
         ]
 
     return (
-        <div className='min-h-screen'>
+        <div className='min-h-screen relative'>
             <Header />
 
             {/* Hero amb video/backdrop */}
@@ -103,20 +103,12 @@ function MovieDetailPage() {
 
             {/* Contingut principal */}
             <div className='relative z-30 -mt-20 px-6 md:px-16'>
-                {/* Botó tornar */}
-                <button
-                    onClick={() => navigate(-1)}
-                    className='flex items-center gap-2 text-white/60 hover:text-white
-                               transition-colors duration-200 mb-6 text-sm'
-                >
-                    <HiArrowLeft className='text-lg' />
-                    Tornar
-                </button>
+                {/* Contingut alineat amb el marge principal */}
 
                 <div className='flex flex-col lg:flex-row gap-8'>
                     {/* Columna esquerra: Poster (visible en desktop) */}
                     <div className='hidden lg:block flex-shrink-0 w-64'>
-                        <div className='sticky top-8'>
+                        <div>
                             {data.poster_path && (
                                 <img
                                     src={IMAGE_BASE_URL + data.poster_path}
@@ -132,7 +124,7 @@ function MovieDetailPage() {
                     <div className='flex-1 min-w-0'>
                         {/* Acció buttons */}
                         <div className='mb-6'>
-                            <ActionButtons />
+                            <ActionButtons movie={data} />
                         </div>
 
                         {/* Metadades */}

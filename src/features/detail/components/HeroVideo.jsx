@@ -9,8 +9,8 @@ function HeroVideo({ backdrop, trailerKey, title }) {
         <div className='relative w-full h-[50vh] md:h-[70vh] overflow-hidden'>
             {showTrailer && trailerKey ? (
                 <iframe
-                    className='absolute inset-0 w-full h-full z-10'
-                    src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0&modestbranding=1`}
+                    className='absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100%] min-w-[177.77%] -translate-x-1/2 -translate-y-1/2 max-w-none z-10 pointer-events-none'
+                    src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0&modestbranding=1&controls=0&disablekb=1&fs=0`}
                     title={title}
                     allow="autoplay; encrypted-media"
                     allowFullScreen
@@ -18,7 +18,7 @@ function HeroVideo({ backdrop, trailerKey, title }) {
             ) : (
                 <div className='absolute inset-0'>
                     <img
-                        src={IMAGE_BASE_URL + backdrop}
+                        src={backdrop?.startsWith('http') ? backdrop : IMAGE_BASE_URL + backdrop}
                         alt={title}
                         className='w-full h-full object-cover object-center animate-slow-zoom'
                     />
@@ -32,7 +32,10 @@ function HeroVideo({ backdrop, trailerKey, title }) {
             <div className='absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/60 to-transparent z-20 pointer-events-none' />
 
             {/* Contingut sobre el video */}
-            <div className='absolute bottom-0 left-0 right-0 z-30 px-6 md:px-16 pb-8 md:pb-14'>
+            <div className={`absolute bottom-0 left-0 right-0 z-30 px-6 md:px-16 pb-24 pointer-events-auto
+                            transition-all duration-1000 ease-in-out
+                            ${showTrailer ? 'opacity-20 blur-sm hover:opacity-100 hover:blur-none' : 'opacity-100'}`}
+            >
                 <h1 className='text-3xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-2xl mb-4 max-w-3xl'>
                     {title}
                 </h1>
@@ -56,8 +59,8 @@ function HeroVideo({ backdrop, trailerKey, title }) {
                     <button
                         onClick={() => setShowTrailer(false)}
                         className='flex items-center gap-2 px-6 py-3 rounded-lg
-                                   bg-white/20 text-white font-semibold text-sm md:text-base
-                                   hover:bg-white/30 transition-all duration-300 backdrop-blur-sm'
+                                   bg-black/50 text-white font-semibold text-sm md:text-base
+                                   hover:bg-black/80 transition-all duration-300 backdrop-blur-md border border-white/20'
                     >
                         ✕ Tancar tràiler
                     </button>

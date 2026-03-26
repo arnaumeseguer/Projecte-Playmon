@@ -13,7 +13,9 @@ function MovieCard({ movie }) {
 
     return (
         <img
-            src={IMAGE_BASE_URL + movie.poster_path}
+            src={movie.poster_path?.startsWith('http') 
+                ? movie.poster_path 
+                : IMAGE_BASE_URL + movie.poster_path}
             onClick={handleClick}
             className='w-[110px] md:w-[195px] border-[3px]
             border-transparent hover:border-gray-400 cursor-pointer rounded-lg

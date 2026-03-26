@@ -8,7 +8,15 @@ export default function PerfilCard({
   const correu = user?.email ?? "";
   const avatar = user?.avatar ?? null;
   const username = user?.username ?? "@nomusuari";
-  const plan = user?.plan ?? "Gratuït";
+  const planRaw = user?.plan ?? "basic";
+
+  const planMapping = {
+    basic: { label: "Basic", colorClass: "text-white", dotClass: "bg-gray-400", glow: "0 0 4px rgba(255,255,255,0.3)" },
+    super: { label: "Super", colorClass: "text-[#ff9d00]", dotClass: "bg-[#ff9d00] shadow-[0_0_12px_rgba(255,157,0,0.6)]", glow: "0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)" },
+    master: { label: "Master", colorClass: "text-[#a855f7]", dotClass: "bg-[#a855f7] shadow-[0_0_12px_rgba(168,85,247,0.6)]", glow: "0 0 7px #a855f7, 0 0 14px rgba(168,85,247,0.4)" },
+  };
+
+  const planInfo = planMapping[planRaw.toLowerCase()] || planMapping.basic;
 
   return (
     <section className="w-full rounded-3xl bg-[#1f1f1f] px-6 py-12 sm:px-12 sm:py-16 ring-1 ring-white/10 shadow-2xl">
@@ -55,13 +63,21 @@ export default function PerfilCard({
         {/* Camps d'informació */}
         <div className="w-full max-w-3xl space-y-5">
           <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
-            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Nom</span>
-            <span className="text-xl sm:text-2xl font-semibold text-white">{nom}</span>
+            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Nom d'usuari</span>
+            <span 
+              className={`text-xl sm:text-2xl font-semibold ${planInfo.colorClass}`}
+              style={{ textShadow: planInfo.glow }}
+            >
+              {username}
+              {planRaw.toLowerCase() === 'master' && (
+                <span className="ml-2 text-white inline-block drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">★</span>
+              )}
+            </span>
           </div>
           
           <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
-            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Nom d'usuari</span>
-            <span className="text-xl sm:text-2xl font-semibold text-white">{username}</span>
+            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Nom</span>
+            <span className="text-xl sm:text-2xl font-semibold text-white">{nom}</span>
           </div>
 
           <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
@@ -71,9 +87,9 @@ export default function PerfilCard({
 
           <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
             <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Pla de subscripció</span>
-            <span className="flex items-center gap-3 text-xl sm:text-2xl font-semibold text-white">
-              <span className={`h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full ${plan.toLowerCase() === 'premium' || plan.toLowerCase() === 'pro' ? 'bg-yellow-400 shadow-[0_0_12px_rgba(250,204,21,0.6)]' : 'bg-blue-400 shadow-[0_0_12px_rgba(96,165,250,0.6)]'}`}></span>
-              {plan}
+            <span className={`flex items-center gap-3 text-xl sm:text-2xl font-semibold ${planInfo.colorClass}`}>
+              <span className={`h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full ${planInfo.dotClass}`}></span>
+              {planInfo.label}
             </span>
           </div>
         </div>
