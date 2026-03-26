@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { creaRepositoriVideoFixer } from "../dades/repositoriVideoFitxer";
+import { creaRepositoriVideoApi } from "@/features/reproductor/dades/repositoriVideoApi";
 
 /**
- * DIP: la UI depèn d’un repositori abstracte; ara usem FIXER.
- * Demà canvies la fàbrica per una implementació API.
+ * DIP: la UI depèn d’un repositori abstracte; ara usem API en comptes de dades locals (FIXER).
  */
 export function useVideoAsset(id) {
-  const repo = useMemo(() => creaRepositoriVideoFixer(), []);
+  const repo = useMemo(() => creaRepositoriVideoApi(), []);
   const [dades, setDades] = useState(null);
   const [carregant, setCarregant] = useState(true);
   const [error, setError] = useState(null);

@@ -1,4 +1,15 @@
-import { API_BASE_URL } from "./httpClient";
+import { API_BASE_URL, httpClient } from "./httpClient";
+
+export async function getVideos(userId = null, limit = 20, offset = 0) {
+    const params = new URLSearchParams({ limit, offset });
+    if (userId) params.append("user_id", userId);
+    
+    return httpClient(`/videos?${params.toString()}`);
+}
+
+export async function getVideoById(videoId) {
+    return httpClient(`/videos/${videoId}`);
+}
 
 export async function uploadVideo({ file, title, description, isPublic, userId }) {
     if (!file) {
