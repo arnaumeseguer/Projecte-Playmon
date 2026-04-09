@@ -51,7 +51,7 @@ export async function deleteAvatar(userId) {
 }
 
 export async function updateUserSubscription(userId, plan) {
-    // Normalizing plan for server: "Pla Super" -> "super"
+    // Normalizing plan for server: "Pla Ultra" -> "ultra" (stored as "super" in DB)
     const normalizedPlan = plan.toLowerCase().replace("pla ", "");
     
     return httpClient(`/users/${userId}`, {

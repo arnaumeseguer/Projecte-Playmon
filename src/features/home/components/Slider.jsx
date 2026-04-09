@@ -16,13 +16,28 @@ const SIDE_W = 12;  // % de cada costat
 function Slider() {
     const navigate = useNavigate();
     const [movieList, setMovieList] = useState([])
-    // trackIdx: 0 = clon de la darrera, 1..N = originals, N+1 = clon de la primera
     const [trackIdx, setTrackIdx] = useState(1)
     const [noAnim, setNoAnim] = useState(false)  // desactiva transició per al salt del clon
     const timerRef = useRef(null)
+    const isAnimatingRef = useRef(false) // Bloqueja els clics massius molt ràpids
 
     useEffect(() => {
-        GlobalApi.getTrendingVideos().then(r => setMovieList(r.data.results))
+        GlobalApi.getTrendingVideos().then(r => {
+            const allItems = r.data?.results || [];
+            if (allItems.length === 0) return;
+
+            // Calcula pauta de 4-5 dies (ex: dividim el num de dies transcorreguts per 4.5)
+            // Utilitzem l'unix epoch
+            const quadridays = Math.floor(Date.now() / (1000 * 60 * 60 * 24 * 4.5));
+            
+            // Avança l'offset en blocs de 10 segons la pauta temporal de 4 dies
+            const offset = (quadridays * 10) % Math.max(1, allItems.length - 10);
+            
+            // Agafa només 10 ítems d'aquesta "pàgina temporal"
+            const rotatingSelection = allItems.slice(offset, offset + 10);
+            
+            setMovieList(rotatingSelection);
+        })
     }, [])
 
     const handleMovieClick = (movie) => {
@@ -43,6 +58,9 @@ function Slider() {
     // ── Quan aterrem al clon, saltem a l'original sense animació ──
     useEffect(() => {
         if (total === 0) return
+        
+        isAnimatingRef.current = true // Bloqueja els clics
+
         if (trackIdx === 0) {
             // Clon de la darrera → salt a la darrera real
             const t = setTimeout(() => {
@@ -59,6 +77,13 @@ function Slider() {
             }, SLIDE_MS)
             return () => clearTimeout(t)
         }
+        
+        // Si no està en clon, desbloqueja al cap d'un moment per permetre l'anim normal
+        const t2 = setTimeout(() => {
+            isAnimatingRef.current = false
+        }, SLIDE_MS)
+        return () => clearTimeout(t2)
+
     }, [trackIdx, total])
 
     // Reactiva animació el frame següent al salt
@@ -73,7 +98,9 @@ function Slider() {
 
     const resetTimer = useCallback(() => {
         clearInterval(timerRef.current)
-        timerRef.current = setInterval(goNext, AUTO_ADVANCE_MS)
+        timerRef.current = setInterval(() => {
+            if (!isAnimatingRef.current) goNext()
+        }, AUTO_ADVANCE_MS)
     }, [goNext])
 
     useEffect(() => {
@@ -81,7 +108,11 @@ function Slider() {
         return () => clearInterval(timerRef.current)
     }, [total, resetTimer])
 
-    const handleNav = (fn) => { fn(); resetTimer() }
+    const handleNav = (fn) => { 
+        if (isAnimatingRef.current) return;
+        fn(); 
+        resetTimer();
+    }
 
     if (extendedList.length === 0) return null
 
@@ -179,7 +210,7 @@ function Slider() {
 
                 {/* Dots indicadors */}
                 <div className='flex justify-center gap-2 mt-3'>
-                    {movieList.slice(0, 20).map((_, idx) => (
+                    {movieList.map((_, idx) => (
                         <button
                             key={idx}
                             onClick={() => handleNav(() => setTrackIdx(idx + 1))}
@@ -190,7 +221,7 @@ function Slider() {
                                 }`}
                         />
                     ))}
-            </div>
+                </div>
         </div>
     )
 }

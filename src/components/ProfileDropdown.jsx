@@ -44,7 +44,7 @@ export default function ProfileDropdown({ mostrarMenu = true }) {
   const nomUsuari = user?.name ?? user?.username ?? "Usuari";
   const avatarUsuari = user?.avatar ?? defaultAvatar;
   const esAdmin = (user?.role || "").toLowerCase() === "admin";
-  const isPremium = user?.pla_pagament === 'super' || user?.pla_pagament === 'master';
+  const isPremium = user?.pla_pagament === 'master'; // L'estrella ★ és exclusiva del Pla Master
 
   const inicials = useMemo(() => {
     const n = (nomUsuari || "U").trim();
