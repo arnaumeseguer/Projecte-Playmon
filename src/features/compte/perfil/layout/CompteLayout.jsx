@@ -5,9 +5,9 @@ import logo from "@/assets/LogoProducteLandingPageTransparent.png";
 
 export default function CompteLayout() {
     return (
-        <div className="min-h-screen bg-black">
-            <HeaderCompte logoSrc={logo} appName="Playmon" />
-            <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-6 px-5 py-7 lg:grid-cols-[280px_1fr]">
+        <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #111111 40%, #0d0a00 70%, #1a0f00 100%)' }}>
+            <HeaderCompte logoSrc={logo} appName="Playmon" mostrarMenu={false} />
+            <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-8 px-6 py-10 lg:grid-cols-[280px_1fr]">
                 <aside>
                     <SideBarCompte />
                 </aside>

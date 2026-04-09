@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom';
 import GlobalApi from '@/Services/GlobalApi';
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2"
 
@@ -13,6 +14,7 @@ const ITEM_W = 76;  // % del contenidor
 const SIDE_W = 12;  // % de cada costat
 
 function Slider() {
+    const navigate = useNavigate();
     const [movieList, setMovieList] = useState([])
     // trackIdx: 0 = clon de la darrera, 1..N = originals, N+1 = clon de la primera
     const [trackIdx, setTrackIdx] = useState(1)
@@ -22,6 +24,12 @@ function Slider() {
     useEffect(() => {
         GlobalApi.getTrendingVideos().then(r => setMovieList(r.data.results))
     }, [])
+
+    const handleMovieClick = (movie) => {
+        const isTv = movie.media_type === 'tv' || (!movie.title && movie.name)
+        const type = isTv ? 'tv' : 'movie'
+        navigate(`/${type}/${movie.id}`)
+    }
 
     const total = movieList.length
 
@@ -90,44 +98,47 @@ function Slider() {
     }
 
     return (
-        <div className='w-full px-6 md:px-10 mt-6 select-none'>
-            <div className='transition-transform duration-500 ease-in-out hover:scale-[1.025]
-                hover:shadow-[0_0_60px_rgba(204,132,0,0.2)]'>
+        <div className='w-full px-6 md:px-10 mt-2 select-none'>
+            {/* Contenidor principal — fa el clip del filmstrip */}
+            <div className='relative overflow-hidden rounded-2xl h-[220px] md:h-[440px] group
+                transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(204,132,0,0.2)]'>
 
-                {/* Contenidor principal — fa el clip del filmstrip */}
-                <div className='relative overflow-hidden rounded-2xl h-[220px] md:h-[440px] group'>
-
-                    {/* ═══ UN ÚNIC DIV QUE LLISCA (filmstrip) ═══ */}
+                {/* ═══ UN ÚNIC DIV QUE LLISCA (filmstrip) ═══ */}
                     <div style={trackStyle}>
                         {extendedList.map((movie, idx) => {
                             const isCurrent = idx === trackIdx
                             return (
                                 <div
                                     key={idx}
-                                    className='flex-shrink-0 h-full relative overflow-hidden'
-                                    style={{ width: `${ITEM_W}%` }}
+                                    className={`flex-shrink-0 h-full relative px-1 md:px-2 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${isCurrent ? 'cursor-pointer hover:scale-[1.015]' : ''}`}
+                                    style={{ 
+                                        width: `${ITEM_W}%`,
+                                        transform: isCurrent ? 'scale(1)' : 'scale(0.89)',
+                                        opacity: isCurrent ? 1 : 0.6
+                                    }}
+                                    onClick={() => isCurrent && handleMovieClick(movie)}
                                 >
-                                    <img
-                                        src={movie?.backdrop_path?.startsWith('http') 
-                                            ? movie.backdrop_path 
-                                            : IMAGE_BASE_URL + movie?.backdrop_path}
-                                        className='w-full h-full object-cover object-center'
-                                        style={{
-                                            filter: isCurrent
-                                                ? 'brightness(1)'
-                                                : 'brightness(0.35) blur(1px)',
-                                            transition: `filter ${SLIDE_MS}ms ease`,
-                                        }}
-                                        alt={movie?.title || movie?.name}
-                                    />
-                                    {isCurrent && (
-                                        <>
-                                            <div className='absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent' />
-                                            <p className='absolute bottom-4 left-5 text-white font-bold text-base md:text-xl drop-shadow-lg'>
-                                                {movie?.title || movie?.name}
-                                            </p>
-                                        </>
-                                    )}
+                                    <div className='w-full h-full relative rounded-2xl overflow-hidden shadow-2xl'>
+                                        <img
+                                            src={movie?.backdrop_path?.startsWith('http') 
+                                                ? movie.backdrop_path 
+                                                : IMAGE_BASE_URL + movie?.backdrop_path}
+                                            className='w-full h-full object-cover object-center'
+                                            style={{
+                                                filter: isCurrent ? 'brightness(1)' : 'brightness(0.5)',
+                                                transition: `filter ${SLIDE_MS}ms ease`,
+                                            }}
+                                            alt={movie?.title || movie?.name}
+                                        />
+                                        {isCurrent && (
+                                            <>
+                                                <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent' />
+                                                <p className='absolute bottom-5 left-6 text-white font-black text-xl md:text-3xl drop-shadow-[0_0_10px_rgba(0,0,0,0.8)] tracking-wide'>
+                                                    {movie?.title || movie?.name}
+                                                </p>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
                             )
                         })}
@@ -179,7 +190,6 @@ function Slider() {
                                 }`}
                         />
                     ))}
-                </div>
             </div>
         </div>
     )

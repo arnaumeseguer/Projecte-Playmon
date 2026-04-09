@@ -23,7 +23,7 @@ export default function CompteInformacioPersonal({onChangePhoto}) {
   const planMapping = {
     basic: { color: "text-white", glow: "0 0 4px rgba(255,255,255,0.3)" },
     super: { color: "text-[#ff9d00]", glow: "0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)" },
-    master: { color: "text-[#a855f7]", glow: "0 0 7px #a855f7, 0 0 14px rgba(168,85,247,0.4)" },
+    master: { color: "text-[#ff9d00]", glow: "0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)" },
   };
   const planInfo = planMapping[user.plan.toLowerCase()] || planMapping.basic;
   const nameColorClass = planInfo.color;
