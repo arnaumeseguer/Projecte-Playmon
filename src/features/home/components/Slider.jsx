@@ -26,14 +26,14 @@ function Slider() {
             const allItems = r.data?.results || [];
             if (allItems.length === 0) return;
 
-            // Calcula pauta de 4-5 dies (ex: dividim el num de dies transcorreguts per 4.5)
-            // Utilitzem l'unix epoch
-            const quadridays = Math.floor(Date.now() / (1000 * 60 * 60 * 24 * 4.5));
+            // Número de setmana actual (idèntic al WEEK_SEED de GlobalApi)
+            // → el mateix durant tota la setmana, canvia cada 7 dies
+            const weekNumber = Math.floor(Date.now() / (1000 * 60 * 60 * 24 * 7));
             
-            // Avança l'offset en blocs de 10 segons la pauta temporal de 4 dies
-            const offset = (quadridays * 10) % Math.max(1, allItems.length - 10);
+            // Avança l'offset en blocs de 10 per setmana
+            const offset = (weekNumber * 10) % Math.max(1, allItems.length - 10);
             
-            // Agafa només 10 ítems d'aquesta "pàgina temporal"
+            // Agafa només 10 ítems d'aquesta "pàgina setmanal"
             const rotatingSelection = allItems.slice(offset, offset + 10);
             
             setMovieList(rotatingSelection);
