@@ -35,14 +35,9 @@ const mapMovie = (m) => {
         name: m.title || m.name,
         release_date: m.fecha_estreno ? m.fecha_estreno.split('T')[0] : (m.release_date || ''),
         first_air_date: m.fecha_estreno ? m.fecha_estreno.split('T')[0] : (m.first_air_date || ''),
-<<<<<<< HEAD
-        
-=======
         status: m.estat || m.status,
         number_of_seasons: m.num_temporades || m.number_of_seasons,
         number_of_episodes: m.num_episodis || m.number_of_episodes,
-
->>>>>>> pantallaDetallsContingut#17
         // Genres (expected as array of objects {id, name})
         genres: Array.isArray(categoria) 
             ? categoria.map(c => typeof c === 'object' ? c : { id: c, name: String(c) }) 
@@ -74,17 +69,12 @@ const mapMovie = (m) => {
 
 // Wraps list response in { results: [...] } to match TMDB structure
 const mapResults = (res) => {
-<<<<<<< HEAD
-    const rawData = Array.isArray(res.data) ? res.data : (res.data.results || []);
-    return { 
-=======
     let rawData = Array.isArray(res.data) ? res.data : (res.data.results || []);
     
     // Mescla aleatòria massiva per garantir l'efecte de rotació constant (tendències que sempre canvien)
     rawData = rawData.sort(() => 0.5 - Math.random());
     
     return {
->>>>>>> pantallaDetallsContingut#17
         ...res,
         data: { 
             results: rawData.map(mapMovie) 
