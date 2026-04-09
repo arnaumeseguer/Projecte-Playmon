@@ -1,39 +1,92 @@
+import { getVideoById } from "@/api/videosApi";
+
 /** @returns {import("../domini/repositoriVideo.port").RepositoriVideoPort} */
 export function creaRepositoriVideoApi() {
   return {
     async obtenirPerId(id) {
-      // 1. AQUI HAURIES DE FER EL FETCH AL TEU SERVIDOR PER OBTENIR EL TÍTOL I LA DESCRIPCIÓ
-      // const resposta = await fetch(`http://EL_TEU_BACKEND/api/videos/${id}`);
-      // const dadesBackend = await resposta.json();
-      
-      // Simulem el que et tornaria la base de dades (sense el vídeo, només dades)
-      const dadesBackend = {
-        id: id, // Aquest ID ha de ser el 'public_id' de Cloudinary (ex: "arxiu_video_1")
-        titol: "Vídeo des de Cloudinary", 
-        descripcio: "Aquest vídeo s'està carregant directament des del teu núvol de Cloudinary.",
-        poster: `https://res.cloudinary.com/dm5tr3lwj/video/upload/${id}.jpg`, // Cloudinary pot generar la miniatura automàticament
-        any: "2026",
-        genere: "Acció",
-        duracioText: "Desconeguda"
-      };
+      const dadaVideo = await getVideoById(id);
 
-      // 2. CONSTRUÏM LES URLS DE CLOUDINARY DIRECTAMENT AL FRONTEND (Segur, sense secrets)
-      // Substituïm el núvol pel teu: 'dm5tr3lwj'
+      if (!dadaVideo) {
+        const e = new Error("No s'ha trobat el vídeo.");
+        e.code = "VIDEO_NOT_FOUND";
+        throw e;
+      }
+
+      const idNormalitzat = dadaVideo.id != null ? String(dadaVideo.id) : String(id);
+
+      const titol =
+        dadaVideo.title ??
+        dadaVideo.titol ??
+        dadaVideo.nombre ??
+        "Sense títol";
+
+      const descripcio =
+        dadaVideo.description ??
+        dadaVideo.descripcio ??
+        dadaVideo.sinopsis ??
+        "";
+
+      const poster =
+        dadaVideo.poster_path ??
+        dadaVideo.poster ??
+        dadaVideo.image ??
+        "";
+
+      const hls =
+        dadaVideo.hls_url ??
+        dadaVideo.hls ??
+        dadaVideo.m3u8_url ??
+        null;
+
+      const mp4 =
+        dadaVideo.video_url ??
+        dadaVideo.url ??
+        dadaVideo.mp4_url ??
+        null;
+
+      if (!hls && !mp4) {
+        const e = new Error("El vídeo no té cap font reproduïble.");
+        e.code = "VIDEO_SOURCE_MISSING";
+        throw e;
+      }
+
+      let any = null;
+      const dataEstreno =
+        dadaVideo.fecha_estreno ??
+        dadaVideo.data_estrena ??
+        dadaVideo.release_date ??
+        null;
+
+      if (typeof dataEstreno === "string" && dataEstreno.includes("-")) {
+        any = dataEstreno.split("-")[0];
+      } else if (typeof dadaVideo.any === "string" || typeof dadaVideo.any === "number") {
+        any = String(dadaVideo.any);
+      }
+
+      const genere =
+        dadaVideo.categoria ??
+        dadaVideo.genre ??
+        dadaVideo.genere ??
+        "N/A";
+
+      const duracioText =
+        dadaVideo.durada ??
+        dadaVideo.duration_text ??
+        dadaVideo.duration ??
+        "N/A";
+
       return {
-        id: dadesBackend.id,
-        titol: dadesBackend.titol,
-        descripcio: dadesBackend.descripcio,
-        poster: dadesBackend.poster,
+        id: idNormalitzat,
+        titol,
+        descripcio,
+        poster,
         fonts: {
-          // Format MP4 universal des de Cloudinary
-          mp4: `https://res.cloudinary.com/dm5tr3lwj/video/upload/${id}.mp4`,
-          
-          // Si tens HLS confgurat a Cloudinary, és així (utilitzant el perfil sp_auto)
-          // hls: `https://res.cloudinary.com/dm5tr3lwj/video/upload/sp_auto/${id}.m3u8`
+          hls,
+          mp4,
         },
-        any: dadesBackend.any,
-        genere: dadesBackend.genere,
-        duracioText: dadesBackend.duracioText
+        any,
+        genere,
+        duracioText,
       };
     },
   };

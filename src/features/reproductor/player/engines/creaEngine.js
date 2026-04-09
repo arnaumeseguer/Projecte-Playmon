@@ -1,4 +1,5 @@
 import Hls from "hls.js";
+import { creaEngineNatiu } from "./engineNatiu";
 
 export function creaEngineHlsJs() {
   /** @type {Hls | null} */
@@ -8,7 +9,7 @@ export function creaEngineHlsJs() {
     nom: "hls.js",
     async carrega({ videoEl, url }) {
       hls = new Hls({
-        // opcional: pots afinar buffers ací
+        // opcional: pots afinar buffers aquí
         // maxBufferLength: 30,
         // backBufferLength: 90,
       });
@@ -34,4 +35,12 @@ export function creaEngineHlsJs() {
       }
     },
   };
+}
+
+export function creaEnginePerFont({ videoEl, font }) {
+  if (font.tipus === "hls" && Hls.isSupported()) {
+    return creaEngineHlsJs();
+  }
+  // Fallback o per defecte per MP4 o HLS natiu
+  return creaEngineNatiu();
 }

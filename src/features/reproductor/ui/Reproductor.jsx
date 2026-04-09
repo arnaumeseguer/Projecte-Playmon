@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { usePlayerController } from "../hooks/usePlayerController";
+import { usePlayerController } from "@/features/reproductor/hooks/usePlayerController";
 
 export default function Reproductor({ titol, poster, fonts, onTornar, onFinal }) {
   const {

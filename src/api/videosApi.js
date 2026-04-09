@@ -1,60 +1,91 @@
-import { API_BASE_URL, httpClient } from "./httpClient";
+import { httpClient, API_BASE_URL } from "./httpClient";
 
-export async function getVideos(userId = null, limit = 20, offset = 0) {
-    const params = new URLSearchParams({ limit, offset });
-    if (userId) params.append("user_id", userId);
-    
-    return httpClient(`/videos?${params.toString()}`);
+/**
+ * Llistat de pel·lícules/vídeos per al reproductor.
+ * IMPORTANT:
+ * - El backend GET actual exposa /api/pelis i /api/pelis/:id
+ * - Com que API_BASE_URL ja inclou /api per defecte, ací usem /pelis i no /api/pelis
+ */
+export async function getVideos(userId = null, limit = 20, offset = 0, categoria = null) {
+  const params = new URLSearchParams({
+    limit: String(limit),
+    offset: String(offset),
+  });
+
+  if (userId) params.append("user_id", String(userId));
+  if (categoria) params.append("categoria", String(categoria));
+
+  return httpClient(`/pelis?${params.toString()}`, {
+    headers: {
+      Accept: "application/json",
+    },
+  });
 }
 
-export async function getVideoById(videoId) {
-    return httpClient(`/videos/${videoId}`);
+export async function getVideoById(id) {
+  if (!id) {
+    throw new Error("ID de vídeo no vàlid");
+  }
+
+  return httpClient(`/pelis/${id}`, {
+    headers: {
+      Accept: "application/json",
+    },
+  });
 }
 
+/**
+ * Aquesta ruta de pujada la deixe tal com la tenies,
+ * però arreglada perquè importe API_BASE_URL correctament.
+ *
+ * Revisa que al backend realment existisca:
+ * POST /api/videos/upload
+ * o adapta aquesta ruta si el teu backend usa un altre endpoint.
+ */
 export async function uploadVideo({ file, title, description, isPublic, userId }) {
-    if (!file) {
-        throw new Error("Cal seleccionar un fitxer de vídeo");
-    }
+  if (!file) {
+    throw new Error("Cal seleccionar un fitxer de vídeo");
+  }
 
-    if (!userId) {
-        throw new Error("No s'ha pogut identificar l'usuari");
-    }
+  if (!userId) {
+    throw new Error("No s'ha pogut identificar l'usuari");
+  }
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("title", title || "");
-    formData.append("description", description || "");
-    formData.append("is_public", isPublic ? "true" : "false");
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("title", title || "");
+  formData.append("description", description || "");
+  formData.append("is_public", isPublic ? "true" : "false");
 
-    const token = localStorage.getItem("authToken");
-    const headers = {
-        "X-User-ID": String(userId),
-    };
+  const token = localStorage.getItem("authToken");
+  const headers = {
+    "X-User-ID": String(userId),
+  };
 
-    if (token) {
-        headers.Authorization = `Bearer ${token}`;
-    }
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
 
-    const response = await fetch(`${API_BASE_URL}/videos/upload`, {
-        method: "POST",
-        headers,
-        body: formData,
-    });
+  const response = await fetch(`${API_BASE_URL}/videos/upload`, {
+    method: "POST",
+    headers,
+    body: formData,
+  });
 
-    let data = null;
-    try {
-        data = await response.json();
-    } catch {
-        data = null;
-    }
+  let data = null;
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
 
-    if (!response.ok) {
-        const message = data?.error || `HTTP ${response.status}`;
-        const error = new Error(message);
-        error.status = response.status;
-        error.data = data;
-        throw error;
-    }
+  if (!response.ok) {
+    const message = data?.error || `HTTP ${response.status}`;
+    const error = new Error(message);
+    error.status = response.status;
+    error.data = data;
+    throw error;
+  }
 
-    return data;
+  return data;
 }

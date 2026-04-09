@@ -72,6 +72,11 @@ const App = () => {
 
           <Route path='/reproduccio/:id' element={<PantallaReproduccio />} />
 
+          <Route path="/play" element={<ProtectedRoute element={<PantallaReproduccio />} />}>
+            <Route path=":videoId" element={<PantallaReproduccio />} />
+            <Route path="trailer/:videoId" element={<PantallaReproduccio />} />
+          </Route>
+
           <Route path="/403" element={<Forbidden />} />
 
           {/* Catch-all 404 route - must be last */}

@@ -6,7 +6,7 @@ export function creaEngineNatiu() {
       // Espera metadata (duració disponible)
       await new Promise((resolve, reject) => {
         const ok = () => cleanup(resolve);
-        const ko = () => cleanup(() => reject(new Error("Error carregant font nativa")))();
+        const ko = () => cleanup(() => reject(new Error("Error carregant font nativa")));
 
         const cleanup = (fn) => {
           videoEl.removeEventListener("loadedmetadata", ok);
