@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { HiFilm, HiTv, HiPlayCircle, HiPlus, HiCheck } from 'react-icons/hi2'
-import { TrailerModal } from '@/features/detail/components/ActionButtons.jsx'
+import TrailerModal from '@/features/detail/components/TrailerModal.jsx'
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
 
@@ -180,8 +180,8 @@ function MovieCard({ movie }) {
             {showTrailer && trailerKey && (
                 <TrailerModal
                     trailerKey={trailerKey}
-                    title={movie.title || movie.name}
-                    onClose={() => setShowTrailer(false)}
+                    titol={movie.title || movie.name}
+                    onTancar={() => setShowTrailer(false)}
                 />
             )}
         </div>

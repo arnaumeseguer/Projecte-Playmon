@@ -1,66 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { HiPlus, HiCheck } from 'react-icons/hi'
-import { HiShare, HiXMark, HiPlayCircle } from 'react-icons/hi2'
-
-// ── Modal del Trailer ──────────────────────────────────────────────────────────
-export function TrailerModal({ trailerKey, title, onClose }) {
-    // Tancar amb Escape
-    useEffect(() => {
-        const onKey = (e) => e.key === 'Escape' && onClose()
-        window.addEventListener('keydown', onKey)
-        // Bloquejem scroll del body
-        document.body.style.overflow = 'hidden'
-        return () => {
-            window.removeEventListener('keydown', onKey)
-            document.body.style.overflow = ''
-        }
-    }, [onClose])
-
-    return (
-        <div
-            className='fixed inset-0 z-[9999] flex items-center justify-center'
-            onClick={onClose}
-        >
-            {/* Fons fosc amb blur */}
-            <div className='absolute inset-0 bg-black/90 backdrop-blur-md' />
-
-            {/* Contenidor del vídeo */}
-            <div
-                className='relative z-10 w-full max-w-5xl mx-4 aspect-video
-                            rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)]
-                            ring-1 ring-white/10
-                            animate-[scaleIn_0.3s_ease-out]'
-                onClick={e => e.stopPropagation()}
-            >
-                <iframe
-                    className='w-full h-full'
-                    src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0&modestbranding=1`}
-                    title={`Tràiler: ${title}`}
-                    allow="autoplay; encrypted-media; fullscreen"
-                    allowFullScreen
-                />
-            </div>
-
-            {/* Botó tancar (X) */}
-            <button
-                onClick={onClose}
-                className='absolute top-5 right-5 z-20 w-11 h-11 rounded-full
-                           bg-white/10 backdrop-blur-md border border-white/20
-                           flex items-center justify-center text-white
-                           hover:bg-white/20 hover:scale-110 transition-all duration-200'
-                title='Tancar tràiler (Esc)'
-            >
-                <HiXMark className='text-xl' />
-            </button>
-
-            {/* Label a dalt */}
-            <p className='absolute top-5 left-1/2 -translate-x-1/2 z-20
-                          text-white/60 text-sm font-medium tracking-wide'>
-                {title}
-            </p>
-        </div>
-    )
-}
+import { HiShare, HiPlayCircle } from 'react-icons/hi2'
+import TrailerModal from './TrailerModal'
 
 // ── ActionButtons ──────────────────────────────────────────────────────────────
 function ActionButtons({ movie }) {
@@ -109,8 +50,8 @@ function ActionButtons({ movie }) {
             {showTrailer && trailerKey && (
                 <TrailerModal
                     trailerKey={trailerKey}
-                    title={movie?.title || movie?.name || ''}
-                    onClose={() => setShowTrailer(false)}
+                    titol={movie?.title || movie?.name || ''}
+                    onTancar={() => setShowTrailer(false)}
                 />
             )}
 
