@@ -1,10 +1,8 @@
 import { httpClient, API_BASE_URL } from "./httpClient";
 
 /**
- * Llistat de pel·lícules/vídeos per al reproductor.
- * IMPORTANT:
- * - El backend GET actual exposa /api/pelis i /api/pelis/:id
- * - Com que API_BASE_URL ja inclou /api per defecte, ací usem /pelis i no /api/pelis
+ * Llistat de vídeos pujats pels usuaris (taula `videos`, no `pelicules`).
+ * El backend exposa GET /api/videos
  */
 export async function getVideos(userId = null, limit = 20, offset = 0, categoria = null) {
   const params = new URLSearchParams({
@@ -15,7 +13,7 @@ export async function getVideos(userId = null, limit = 20, offset = 0, categoria
   if (userId) params.append("user_id", String(userId));
   if (categoria) params.append("categoria", String(categoria));
 
-  return httpClient(`/pelis?${params.toString()}`, {
+  return httpClient(`/videos?${params.toString()}`, {
     headers: {
       Accept: "application/json",
     },
@@ -27,7 +25,9 @@ export async function getVideoById(id) {
     throw new Error("ID de vídeo no vàlid");
   }
 
-  return httpClient(`/pelis/${id}`, {
+  // Els vídeos pujats pels usuaris estan a /api/videos/:id (taula `videos`),
+  // no a /api/pelis/:id (taula `pelicules` de catàleg).
+  return httpClient(`/videos/${id}`, {
     headers: {
       Accept: "application/json",
     },
