@@ -14,6 +14,8 @@ import perfilDefecte from '../assets/perfilDefecte.png'
 import { getCurrentUser } from '../api/authApi'
 import SearchOverlay from '@/features/search/SearchOverlay'
 
+import ProfileDropdown from './ProfileDropdown';
+
 function Header() {
     const [toggle, setToggle] = useState(false)
     const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -34,32 +36,46 @@ function Header() {
             action: () => setIsSearchOpen(true)
         },
         {
-            name: "ORIGINALS",
+            name: "PLAYMON ORIGINALS",
             icon: HiStar,
         },
         {
             name: "PELICULES",
             icon: HiPlayCircle,
+            path: "/pelicules"
         },
         {
             name: "SERIES",
             icon: HiTv,
+            path: "/series"
         }
     ]
+
+    const checkActive = (item) => {
+        if (isSearchOpen && item.action) return true
+        if (!item.path) return false
+        if (item.path === '/') return location.pathname === '/'
+        return location.pathname.startsWith(item.path)
+    }
     return (
-        <div className='absolute top-0 w-full z-50 flex items-center justify-between px-6 py-4 bg-gradient-to-b from-black/60 to-transparent'>
+        <div className={`h-[80px] w-full z-50 flex items-center justify-between px-6 transition-all duration-500
+            ${isDetailPage 
+                ? 'absolute top-0 bg-gradient-to-b from-black/90 via-black/40 to-transparent' 
+                : 'sticky top-0 bg-[#050505]/95 backdrop-blur-md border-b border-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.6)]'
+            }`}
+        >
             {/* Logo */}
             <img
                 src={logo}
-                className="w-[80px] md:w-[100px] object-contain z-10 cursor-pointer"
+                className="h-[60px] md:h-[75px] w-auto object-contain z-10 cursor-pointer drop-shadow-lg"
                 onClick={() => navigate('/')}
                 alt="Logo"
             />
 
-            {/* Desktop Nav — centrat absolut */}
-            <div className='hidden md:flex gap-6 absolute left-1/2 -translate-x-1/2 items-center'>
+            {/* Desktop Nav */}
+            <div className='hidden md:flex gap-1 xl:gap-2 ml-8 flex-1'>
                 {menu.map((item, index) => (
-                    <HeaderItem key={index} name={item.name} Icon={item.icon} onClick={() => {
+                    <HeaderItem key={index} name={item.name} Icon={item.icon} isActive={checkActive(item)} isDetailPage={isDetailPage} onClick={() => {
                         if (item.action) item.action()
                         else if (item.path) navigate(item.path)
                     }} />
@@ -67,20 +83,20 @@ function Header() {
             </div>
 
             {/* Mobile Nav */}
-            <div className='flex md:hidden gap-6 items-center'>
-                <div className='flex md:hidden gap-8'>
+            <div className='flex md:hidden gap-4 items-center flex-1 justify-end mr-4'>
+                <div className='flex gap-4'>
                     {menu.map((item, index) => index < 3 && (
-                        <HeaderItem key={index} name={''} Icon={item.icon} onClick={() => {
+                        <HeaderItem key={index} name={''} Icon={item.icon} isActive={checkActive(item)} isDetailPage={isDetailPage} onClick={() => {
                             if (item.action) item.action()
                             else if (item.path) navigate(item.path)
                         }} />
                     ))}
-                    <div className='md:hidden' onClick={() => setToggle(!toggle)}>
-                        <HeaderItem name={''} Icon={HiDotsVertical} />
-                        {toggle ? <div className='absolute mt-3 bg-[#1A1A1A]
-                        border-[1px] border-[#CC8400] p-3 px-5 py-4 z-50'>
+                    <div className='md:hidden relative' onClick={() => setToggle(!toggle)}>
+                        <HeaderItem name={''} Icon={HiDotsVertical} isActive={toggle} isDetailPage={isDetailPage} />
+                        {toggle ? <div className='absolute right-0 top-12 mt-3 bg-[#191e25] rounded-xl shadow-2xl
+                        border border-white/10 p-2 z-50 flex flex-col min-w-[200px]'>
                             {menu.map((item, index) => index > 2 && (
-                                <HeaderItem key={index} name={item.name} Icon={item.icon} onClick={() => {
+                                <HeaderItem key={index} name={item.name} Icon={item.icon} isActive={checkActive(item)} isDetailPage={isDetailPage} onClick={() => {
                                     if (item.action) item.action()
                                     else if (item.path) navigate(item.path)
                                 }} />
@@ -90,17 +106,10 @@ function Header() {
                 </div>
             </div>
 
-            {/* Perfil només visible si NO estem a detalls de peli/sèrie */}
-            {!isDetailPage ? (
-                <img
-                    src={user?.avatar || perfilDefecte}
-                    className="w-[40px] h-[40px] rounded-full cursor-pointer object-cover hover:ring-2 hover:ring-[#CC8400] transition-all"
-                    onClick={() => navigate('/compte')}
-                    alt="Profile"
-                />
-            ) : (
-                <div className="w-[40px] h-[40px]"></div> /* Filler per mantenir l'alineació flex "space-between" del header */
-            )}
+            {/* Perfil amb desplegable */}
+            <div className="flex justify-end">
+                <ProfileDropdown />
+            </div>
 
             {/* Modal Superposada del Cercador Universal */}
             <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

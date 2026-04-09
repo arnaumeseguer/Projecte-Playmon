@@ -18,9 +18,11 @@ function CastSection({ cast = [], crew = [] }) {
                             <div className='w-full aspect-[2/3] rounded-lg overflow-hidden mb-2
                                             bg-white/5 border border-white/10
                                             group-hover:border-[#CC8400]/50 transition-all duration-300'>
-                                {actor.profile_path ? (
+                                 {actor.profile_path ? (
                                     <img
-                                        src={IMAGE_BASE_URL + actor.profile_path}
+                                        src={actor.profile_path.startsWith('http')
+                                            ? actor.profile_path
+                                            : IMAGE_BASE_URL + actor.profile_path}
                                         alt={actor.name}
                                         className='w-full h-full object-cover
                                                    group-hover:scale-105 transition-transform duration-500'

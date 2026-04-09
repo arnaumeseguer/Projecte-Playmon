@@ -23,6 +23,9 @@ import Forbidden from '@/features/Forbidden/Forbidden.jsx';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import HomeLayout from '@/features/home/HomeLayout';
 import MovieDetailPage from '@/features/detail/MovieDetailPage';
+import TvDetailPage from '@/features/detail/TvDetailPage';
+import MoviesPage from '@/features/movies/MoviesPage';
+import SeriesPage from '@/features/series/SeriesPage';
 
 const App = () => {
   return (
@@ -36,7 +39,13 @@ const App = () => {
             element={<ProtectedRoute element={<MovieDetailPage />} />}
           />
           <Route path="/tv/:id"
-            element={<ProtectedRoute element={<MovieDetailPage />} />}
+            element={<ProtectedRoute element={<TvDetailPage />} />}
+          />
+          <Route path="/pelicules"
+            element={<ProtectedRoute element={<MoviesPage />} />}
+          />
+          <Route path="/series"
+            element={<ProtectedRoute element={<SeriesPage />} />}
           />
 
           <Route path="/compte" element={<ProtectedRoute element={<CompteLayout />} />}>

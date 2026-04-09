@@ -91,7 +91,7 @@ export const SubscriptionPlans = ({ onSelectPlan }) => {
       title: "Pla Master",
       price: "12.99",
       icon: FiStar,
-      color: "from-purple-500 to-blue-600",
+      color: "from-[#FFD700] to-[#CC8400]",
       features: [
         { text: "Tot el del pla Super", included: true },
         { text: "Qualitat 4K (Ultra HD)", included: true },

@@ -10,10 +10,22 @@ export default function SearchOverlay({ isOpen, onClose }) {
     const [error, setError] = useState('');
 
     useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape' && isOpen) onClose();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
+
+    useEffect(() => {
         if (!isOpen) { 
            setQuery(''); 
            setResults([]); 
+           document.body.style.overflow = 'unset';
            return; 
+        } else {
+           // Prevents double scrolling while search overlay is active
+           document.body.style.overflow = 'hidden';
         }
         
         // Quan l'usuari deixa d'escriure per 500ms, enviem la petició de cerca
@@ -21,20 +33,15 @@ export default function SearchOverlay({ isOpen, onClose }) {
             if (query.length > 1) {
                 setLoading(true);
                 setError('');
-                // CRIDEM AL TEU PROPI SERVIDOR (localhost:8000), NO A TMDB!
                 GlobalApi.searchLocalMovies(query)
                     .then(res => {
-                        setResults(res.data);
+                        setResults(res.data.results || []);
                         setLoading(false);
                     })
                     .catch(err => {
                         console.log("Error de connexió local:", err);
-                        // FINS QUE EL TEU COMPANY NO ACABI EL BACKEND, POSAREM AQUEST 'MOCK'
-                        setError('No es pot connectar al backend local. Simulant resultats de prova...');
-                        setResults([
-                            { id: 991, title: 'Resultat Simulat: ' + query + ' 1', poster_path: null, backdrop_path: null },
-                            { id: 992, title: 'Resultat Simulat: ' + query + ' 2', poster_path: null, backdrop_path: null }
-                        ]);
+                        setError('No es pot connectar al backend local.');
+                        setResults([]);
                         setLoading(false);
                     });
             } else {
@@ -48,7 +55,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[100] bg-black/85 overflow-y-auto w-full h-full animate-fade-in">
+        <div className="fixed inset-0 z-[100] bg-black/90 overflow-y-auto w-full h-screen animate-fade-in backdrop-blur-sm">
             {/* Botó Tancar */}
             <button 
                 onClick={onClose} 
@@ -58,7 +65,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
                 <HiXMark className="text-4xl" />
             </button>
             
-            <div className="pt-24 px-6 md:px-16 flex flex-col items-center min-h-[100vh]">
+            <div className="pt-24 px-6 md:px-16 flex flex-col items-center min-h-screen pb-12">
                 {/* Search Bar Gegant */}
                 <div className="relative w-full max-w-4xl group">
                     <HiMagnifyingGlass className="absolute left-6 top-1/2 -translate-y-1/2 text-white/40 text-3xl group-focus-within:text-[#CC8400] transition-colors" />
@@ -89,8 +96,11 @@ export default function SearchOverlay({ isOpen, onClose }) {
                     {!loading && results.length > 0 && (
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
                             {results.map((movie) => (
-                                <div key={movie.id} className="animate-fade-in hover:scale-105 transition-transform">
+                                <div key={movie.id} className="animate-fade-in hover:scale-105 transition-transform flex flex-col items-center">
                                     <MovieCard movie={movie} />
+                                    <p className="text-white/80 text-sm font-medium mt-2 text-center line-clamp-2 w-full px-1">
+                                        {movie.title || movie.name}
+                                    </p>
                                 </div>
                             ))}
                         </div>

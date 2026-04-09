@@ -1,37 +1,24 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-
-import defaultAvatar from "@/assets/perfilDefecte.png";
-import { ensureCurrentUser, getCurrentUser, logout } from "@/api/authApi";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import logo from "@/assets/LogoProducteLandingPageTransparent.png";
+import { ensureCurrentUser, getCurrentUser } from "@/api/authApi";
+import ProfileDropdown from "./ProfileDropdown";
 
 export default function HeaderCompte({
-  logoSrc,
+  logoSrc = logo,
   appName = "Playmon",
   mostrarMenu = true,
 }) {
   const navigate = useNavigate();
-
   const [user, setUser] = useState(() => getCurrentUser());
-  const [menuObert, setMenuObert] = useState(false);
-
-  // refs per controlar hover “amb intenció” i click fora
-  const wrapperRef = useRef(null);
-  const closeTimerRef = useRef(null);
 
   useEffect(() => {
     let viu = true;
-
     ensureCurrentUser()
-      .then((u) => {
-        if (viu) setUser(u);
-      })
-      .catch(() => {
-        if (viu) setUser(getCurrentUser());
-      });
+      .then((u) => { if (viu) setUser(u); })
+      .catch(() => { if (viu) setUser(getCurrentUser()); });
 
-    const onStorage = (e) => {
-      if (e.key === "authUser") setUser(getCurrentUser());
-    };
+    const onStorage = (e) => { if (e.key === "authUser") setUser(getCurrentUser()); };
     const onCustom = () => setUser(getCurrentUser());
 
     window.addEventListener("storage", onStorage);
@@ -44,226 +31,30 @@ export default function HeaderCompte({
     };
   }, []);
 
-  // Neteja timers en unmount
-  useEffect(() => {
-    return () => {
-      if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current);
-    };
-  }, []);
-
-  // Click fora per tancar
-  useEffect(() => {
-    if (!menuObert) return;
-
-    const onPointerDown = (e) => {
-      const el = wrapperRef.current;
-      if (!el) return;
-      if (!el.contains(e.target)) setMenuObert(false);
-    };
-
-    window.addEventListener("pointerdown", onPointerDown);
-    return () => window.removeEventListener("pointerdown", onPointerDown);
-  }, [menuObert]);
-
-  const nomUsuari = user?.name ?? user?.username ?? "Usuari";
-  const avatarUsuari = user?.avatar ?? defaultAvatar;
-  const esAdmin = (user?.role || "").toLowerCase() === "admin";
-
-  const inicials = useMemo(() => {
-    const n = (nomUsuari || "U").trim();
-    const parts = n.split(/\s+/).filter(Boolean);
-    const a = parts[0]?.[0] ?? "U";
-    const b = parts[1]?.[0] ?? "";
-    return (a + b).toUpperCase();
-  }, [nomUsuari]);
-
-  const cancelTancar = () => {
-    if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current);
-    closeTimerRef.current = null;
-  };
-
-  const obrirMenu = () => {
-    if (!mostrarMenu) return;
-    cancelTancar();
-    setMenuObert(true);
-  };
-
-  const programarTancarMenu = () => {
-    if (!mostrarMenu) return;
-    cancelTancar();
-    closeTimerRef.current = window.setTimeout(() => {
-      setMenuObert(false);
-    }, 140); // 👈 clau perquè no “fuga” al moure el ratolí
-  };
-
-  const toggleMenuClick = () => {
-    if (!mostrarMenu) return;
-    cancelTancar();
-    setMenuObert((v) => !v); // fallback per touch
-  };
-
-  const tancarSessio = () => {
-    logout();
-    setMenuObert(false);
-    navigate("/login");
-  };
-
   return (
-    <header className="sticky top-0 z-50 w-full">
-      <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/35 backdrop-blur-md" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-white/10" />
+    <header className="sticky top-0 z-[100] w-full bg-[#050505]/95 backdrop-blur-md border-b border-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
+      <div className="relative mx-auto flex h-[100px] w-full items-center justify-between px-6">
+        
+        {/* Placeholder esquerra per balancejar visualment l'espai si calgués nav */}
+        <div className="w-[140px] hidden md:block"></div>
 
-        <div className="relative mx-auto flex h-16 max-w-[1200px] items-center justify-between px-5">
-          {/* Logo esquerra */}
-          <div className="flex items-center gap-3">
-            {logoSrc ? (
-              <img
-                src={logoSrc}
-                alt={`${appName} logo`}
-                className="h-20 w-auto select-none"
-                draggable={false}
-              />
-            ) : (
-              <span className="select-none text-lg font-semibold tracking-tight text-white">
-                {appName}
-              </span>
-            )}
-          </div>
-
-          {/* Usuari dreta + menú */}
-          <div
-            ref={wrapperRef}
-            className="relative"
-            onPointerEnter={obrirMenu}
-            onPointerLeave={programarTancarMenu}
-            onFocusCapture={obrirMenu} // teclat
-            onKeyDown={(e) => {
-              if (e.key === "Escape") setMenuObert(false);
-            }}
-          >
-            <button
-              type="button"
-              onClick={toggleMenuClick}
-              className="flex items-center gap-2 rounded-full px-2 py-1 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
-              aria-haspopup={mostrarMenu ? "menu" : undefined}
-              aria-expanded={mostrarMenu ? menuObert : undefined}
-            >
-              <span 
-                className={`hidden text-sm sm:block transition-all ${
-                  user?.pla_pagament === 'super' ? 'text-[#ff9d00] font-bold' : 
-                  user?.pla_pagament === 'master' ? 'text-[#a855f7] font-black' : 
-                  'text-white font-semibold'
-                }`}
-                style={{
-                  textShadow: user?.pla_pagament === 'super' ? '0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)' : 
-                              user?.pla_pagament === 'master' ? '0 0 7px #a855f7, 0 0 14px rgba(168,85,247,0.4)' : 
-                              '0 0 4px rgba(255,255,255,0.3)'
-                }}
-              >
-                {user?.username || "Usuari"}
-                {user?.pla_pagament === 'master' && (
-                  <span className="ml-1 text-white inline-block drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">★</span>
-                )}
-              </span>
-
-              {avatarUsuari ? (
-                <img
-                  src={avatarUsuari}
-                  alt=""
-                  className={`h-8 w-8 rounded-full object-cover transition-all ${
-                    user?.pla_pagament === 'super' ? 'ring-2 ring-[#ff9d00]' : 
-                    user?.pla_pagament === 'master' ? 'ring-2 ring-[#a855f7]' : 
-                    'ring-1 ring-white/20'
-                  }`}
-                />
-              ) : (
-                <span className={`grid h-8 w-8 place-items-center rounded-full text-xs font-semibold ring-1 transition-all ${
-                  user?.pla_pagament === 'super' ? 'bg-[#ff9d00]/10 text-[#ff9d00] ring-[#ff9d00]' : 
-                  user?.pla_pagament === 'master' ? 'bg-[#a855f7]/10 text-[#a855f7] ring-[#a855f7]' : 
-                  'bg-white/10 text-white/80 ring-white/15'
-                }`}>
-                  {inicials}
-                </span>
-              )}
-
-              {mostrarMenu ? <span className="hidden text-white/60 sm:block">▾</span> : null}
-            </button>
-
-            {/* Menú (sempre muntat → transicions fluides) */}
-            {mostrarMenu ? (
-              <div
-                role="menu"
-                className={[
-                  "absolute right-0 top-[52px] w-64 overflow-hidden rounded-2xl",
-                  "bg-[#1f1f1f] shadow-xl ring-1 ring-white/10",
-                  // “hover bridge” invisible per evitar micro-gap
-                  "before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3",
-                  // Transicions
-                  "origin-top-right transition-all duration-150 ease-out",
-                  menuObert
-                    ? "pointer-events-auto opacity-100 translate-y-0 scale-100"
-                    : "pointer-events-none opacity-0 translate-y-1 scale-95",
-                ].join(" ")}
-                // aquests events asseguren que, si per qualsevol motiu s’activa el leave, no tanque abans d’hora
-                onPointerEnter={cancelTancar}
-                onPointerLeave={programarTancarMenu}
-              >
-                <MenuItem to="/compte/inici" label="Compte" onClick={() => setMenuObert(false)} />
-                <MenuItem
-                  to="/compte/informacio-personal"
-                  label="Informació personal"
-                  onClick={() => setMenuObert(false)}
-                />
-                <MenuItem to="/compte/seguretat" label="Seguretat" onClick={() => setMenuObert(false)} />
-                <MenuItem to="/compte/contrasenya" label="Contrasenya" onClick={() => setMenuObert(false)} />
-                {esAdmin ? (
-                  <MenuItem to="/dashboard" label="Dashboard" onClick={() => setMenuObert(false)} />
-                ) : null}
-
-                <div className="h-px bg-white/10" />
-
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold text-white/85 hover:bg-white/5"
-                  onClick={tancarSessio}
-                  role="menuitem"
-                >
-                  Tancar sessió
-                  <svg 
-                    viewBox="0 0 24 24" 
-                    className="h-4.5 w-4.5 text-white/40 group-hover:text-white/60 transition-colors" 
-                    fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                  >
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <polyline points="16 17 21 12 16 7" />
-                    <line x1="21" y1="12" x2="9" y2="12" />
-                  </svg>
-                </button>
-              </div>
-            ) : null}
-          </div>
+        {/* Logo al centre absolut per garantir que estigui completament centrat */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
+          <img
+            src={logoSrc}
+            alt="Logo"
+            className="h-[80px] md:h-[95px] w-auto object-contain cursor-pointer drop-shadow-2xl hover:scale-105 transition-transform"
+            onClick={() => navigate("/")}
+            draggable={false}
+          />
         </div>
+
+        {/* Perfil empès al màxim a la dreta */}
+        <div className="flex items-center justify-end z-10 w-[140px] md:w-auto">
+          <ProfileDropdown mostrarMenu={mostrarMenu} />
+        </div>
+        
       </div>
     </header>
-  );
-}
-
-function MenuItem({ to, label, onClick }) {
-  return (
-    <NavLink
-      to={to}
-      onClick={onClick}
-      className={({ isActive }) =>
-        [
-          "flex w-full items-center justify-between px-4 py-3 text-sm font-semibold",
-          isActive ? "bg-white/10 text-white" : "text-white/85 hover:bg-white/5",
-        ].join(" ")
-      }
-      role="menuitem"
-    >
-      {label}
-      <span className="text-white/40">›</span>
-    </NavLink>
   );
 }
