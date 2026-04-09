@@ -6,7 +6,9 @@ const PricingCard = ({ title, price, features, recommended, icon: Icon, color, o
     <div className={`relative flex flex-col p-8 rounded-3xl border transition-all duration-500 hover:scale-105 ${
       recommended 
         ? "bg-gradient-to-b from-[#1A1A1A] to-[#0D0D0D] border-[#CC8400] shadow-[0_0_40px_-10px_rgba(204,132,0,0.3)]" 
-        : "bg-[#1A1A1A]/40 backdrop-blur-xl border-white/10 hover:border-white/20"
+        : title === 'Pla Master'
+          ? "bg-gradient-to-b from-[#1c1030] to-[#0D0D0D] border-[#7C3AED] shadow-[0_0_40px_-10px_rgba(124,58,237,0.35)] hover:border-[#A855F7]"
+          : "bg-[#1A1A1A]/40 backdrop-blur-xl border-white/10 hover:border-white/20"
     }`}>
       {recommended && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#CC8400] to-[#E65100] text-black text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider">
@@ -45,9 +47,11 @@ const PricingCard = ({ title, price, features, recommended, icon: Icon, color, o
       <button 
         onClick={() => onSelect({ title, price })}
         className={`w-full py-4 rounded-xl font-bold transition-all duration-300 ${
-          recommended 
-            ? "bg-gradient-to-r from-[#CC8400] to-[#E65100] text-black hover:shadow-[0_0_20px_rgba(230,81,0,0.4)]" 
-            : "bg-white/5 text-white border border-white/10 hover:bg-white/10"
+          title === 'Pla Master'
+            ? "bg-gradient-to-r from-[#7C3AED] to-[#A855F7] text-white hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] hover:brightness-110" 
+            : recommended 
+              ? "bg-gradient-to-r from-[#CC8400] to-[#E65100] text-black hover:shadow-[0_0_20px_rgba(230,81,0,0.4)]" 
+              : "bg-white/5 text-white border border-white/10 hover:bg-white/10"
         }`}
       >
         Seleccionar Pla
@@ -73,7 +77,7 @@ export const SubscriptionPlans = ({ onSelectPlan }) => {
       ],
     },
     {
-      title: "Pla Super",
+      title: "Pla Ultra",
       price: "5.99",
       recommended: true,
       icon: FiZap,
@@ -91,9 +95,9 @@ export const SubscriptionPlans = ({ onSelectPlan }) => {
       title: "Pla Master",
       price: "12.99",
       icon: FiStar,
-      color: "from-[#FFD700] to-[#CC8400]",
+      color: "from-[#7C3AED] to-[#A855F7]",
       features: [
-        { text: "Tot el del pla Super", included: true },
+        { text: "Tot el del pla Ultra", included: true },
         { text: "Qualitat 4K (Ultra HD)", included: true },
         { text: "Accés a pàgina especial Master", included: true },
         { text: "Insígnia exclusiva al perfil", included: true },

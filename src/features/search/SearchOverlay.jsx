@@ -33,14 +33,14 @@ export default function SearchOverlay({ isOpen, onClose }) {
             if (query.length > 1) {
                 setLoading(true);
                 setError('');
-                GlobalApi.searchLocalMovies(query)
+                GlobalApi.searchGlobal(query)
                     .then(res => {
                         setResults(res.data.results || []);
                         setLoading(false);
                     })
                     .catch(err => {
-                        console.log("Error de connexió local:", err);
-                        setError('No es pot connectar al backend local.');
+                        console.error("Error de connexió al servidor:", err);
+                        setError('No es pot connectar al servidor principal.');
                         setResults([]);
                         setLoading(false);
                     });

@@ -22,7 +22,7 @@ const PLAN_DETAILS = {
   },
   super: {
     key: "super",
-    title: "Pla Super",
+    title: "Pla Ultra",
     price: "5.99",
     description: "La millor opció qualitat-preu per a veure i crear contingut sense anuncis.",
     icon: FiZap,
@@ -43,7 +43,7 @@ const PLAN_DETAILS = {
     icon: FiStar,
     accent: "from-[#FFD700] to-[#CC8400]",
     features: [
-      "Tot el del pla Super",
+      "Tot el del pla Ultra",
       "Qualitat 4K (Ultra HD)",
       "Accés a pàgina especial Master",
       "Insígnia exclusiva al perfil",

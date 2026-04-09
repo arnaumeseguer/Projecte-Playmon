@@ -110,7 +110,7 @@ function MovieCard({ movie }) {
             onMouseEnter={() => { if (timeoutRef.current) clearTimeout(timeoutRef.current) }}
             onMouseLeave={() => setIsHovered(false)}
             className="bg-[#121212] rounded-xl shadow-[0_25px_60px_rgba(0,0,0,1)] 
-                       border border-white/10 flex flex-col overflow-hidden animate-fade-in"
+                       border border-white/10 flex flex-col overflow-hidden animate-popupHover"
         >
             {/* Imatge de coberta ampliada */}
             <div className="relative w-full aspect-video cursor-pointer" onClick={handleClick}>
