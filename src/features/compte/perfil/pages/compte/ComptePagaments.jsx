@@ -41,7 +41,7 @@ const PLAN_DETAILS = {
     price: "12.99",
     description: "Experiència premium completa amb qualitat 4K i avantatges exclusius de comunitat.",
     icon: FiStar,
-    accent: "from-purple-500 to-blue-600",
+    accent: "from-[#FFD700] to-[#CC8400]",
     features: [
       "Tot el del pla Super",
       "Qualitat 4K (Ultra HD)",

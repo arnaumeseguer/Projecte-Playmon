@@ -14,6 +14,8 @@ import perfilDefecte from '../assets/perfilDefecte.png'
 import { getCurrentUser } from '../api/authApi'
 import SearchOverlay from '@/features/search/SearchOverlay'
 
+import ProfileDropdown from './ProfileDropdown';
+
 function Header() {
     const [toggle, setToggle] = useState(false)
     const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -65,7 +67,7 @@ function Header() {
             {/* Logo */}
             <img
                 src={logo}
-                className="w-[120px] md:w-[140px] h-auto object-contain z-10 cursor-pointer drop-shadow-lg"
+                className="h-[60px] md:h-[75px] w-auto object-contain z-10 cursor-pointer drop-shadow-lg"
                 onClick={() => navigate('/')}
                 alt="Logo"
             />
@@ -104,17 +106,10 @@ function Header() {
                 </div>
             </div>
 
-            {/* Perfil només visible si NO estem a detalls de peli/sèrie */}
-            {!isDetailPage ? (
-                <img
-                    src={user?.avatar || perfilDefecte}
-                    className="w-[40px] h-[40px] rounded-full cursor-pointer object-cover hover:ring-2 hover:ring-[#CC8400] transition-all"
-                    onClick={() => navigate('/compte')}
-                    alt="Profile"
-                />
-            ) : (
-                <div className="w-[40px] h-[40px]"></div> /* Filler per mantenir l'alineació flex "space-between" del header */
-            )}
+            {/* Perfil amb desplegable */}
+            <div className="flex justify-end">
+                <ProfileDropdown />
+            </div>
 
             {/* Modal Superposada del Cercador Universal */}
             <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

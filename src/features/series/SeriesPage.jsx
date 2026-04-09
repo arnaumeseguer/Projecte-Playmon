@@ -45,7 +45,7 @@ function GenreRow({ genre, allSeries, isFirst }) {
             <div className='flex items-end justify-between mb-4'>
                 <div>
                     {isFirst && (
-                        <span className='text-[10px] font-black tracking-[0.15em] px-2 py-0.5 rounded-sm text-indigo-400 bg-indigo-500/10 border border-indigo-500/30'>
+                        <span className='text-[10px] font-black tracking-[0.15em] px-2 py-0.5 rounded-sm text-[#CC8400] bg-[#CC8400]/10 border border-[#CC8400]/30'>
                             SÈRIES
                         </span>
                     )}
@@ -109,7 +109,7 @@ export default function SeriesPage() {
             <div className='pt-24 pb-16'>
                 {/* Encapçalament */}
                 <div className='flex items-center gap-4 px-6 md:px-12 mb-8'>
-                    <HiTv className='text-indigo-400 text-4xl flex-shrink-0' />
+                    <HiTv className='text-[#CC8400] text-4xl flex-shrink-0' />
                     <div>
                         <h1 className='text-3xl font-black text-white'>Sèries</h1>
                         <p className='text-white/40 text-sm mt-0.5'>
@@ -120,7 +120,7 @@ export default function SeriesPage() {
 
                 {loading ? (
                     <div className='flex justify-center py-32'>
-                        <div className='w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin' />
+                        <div className='w-12 h-12 border-4 border-[#CC8400] border-t-transparent rounded-full animate-spin' />
                     </div>
                 ) : allSeries.length === 0 ? (
                     <div className='flex flex-col items-center py-32 text-center'>

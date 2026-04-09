@@ -1,75 +1,69 @@
 import { NavLink } from "react-router-dom";
+import { HiShieldCheck as ShieldIcon } from "react-icons/hi2";
 
 const items = [
   {
     to: "/compte/inici",
     label: "Inici",
     Icon: HomeIcon,
-    color: "bg-blue-100 text-blue-700",
   },
   {
     to: "/compte/informacio-personal",
     label: "Informació personal",
     Icon: UserIcon,
-    color: "bg-green-100 text-green-700",
   },
   {
     to: "/compte/llista",
     label: "Veure més tard",
     Icon: BookmarkIcon,
-    color: "bg-fuchsia-100 text-fuchsia-700",
   },
   {
     to: "/compte/seguretat",
     label: "Seguretat i inici de sessió",
     Icon: LockIcon,
-    color: "bg-sky-100 text-sky-700",
   },
   {
     to: "/compte/contrasenya",
     label: "Contrasenya",
     Icon: KeyIcon,
-    color: "bg-indigo-100 text-indigo-700",
   },
-  // {
-  //   to: "/compte/connexions",
-  //   label: "Connexions de tercers",
-  //   Icon: LinkIcon,
-  //   color: "bg-cyan-100 text-cyan-700",
-  // },
-  // {
-  //   to: "/compte/privadesa",
-  //   label: "Dades i privadesa",
-  //   Icon: ShieldIcon,
-  //   color: "bg-purple-100 text-purple-700",
-  // },
   {
     to: "/compte/pagaments",
     label: "Pagaments i subscripcions",
     Icon: CardIcon,
-    color: "bg-orange-100 text-orange-700",
+  },
+  {
+    to: "/dashboard/users",
+    label: "Dashboard Admin",
+    Icon: ShieldIcon,
   },
 ];
 
 export default function SideBarCompte() {
   return (
     <aside className="self-start">
-      <div className="mb-3 pl-2 text-sm font-semibold text-white-800">
-        Playmon Compte
+      <div className="mb-4 pl-4 text-[11px] font-bold uppercase tracking-wider text-white/40">
+        Configuració Playmon
       </div>
 
-      <nav className="rounded-2xl bg-white p-2 shadow-sm ring-1 ring-black/5">
+      <nav className="rounded-2xl bg-white/5 border border-white/10 p-2 shadow-2xl backdrop-blur-md">
         <div className="flex flex-col gap-1">
-          {items.map(({ to, label, Icon, color }) => (
-            <NavLink
-              key={to}
-              to={to}
+          {items.map(({ to, label, Icon }) => {
+            // Check for admin role if it's the dashboard link
+            if (label === "Dashboard Admin") {
+                const user = JSON.parse(localStorage.getItem('authUser') || '{}');
+                if (user.role !== 'admin') return null;
+            }
+            return (
+              <NavLink
+                key={to}
+                to={to}
               className={({ isActive }) =>
                 [
-                  "group flex w-full items-center gap-3 rounded-full px-3 py-2 text-left text-sm transition",
+                  "group flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-left text-sm transition-all duration-300",
                   isActive
-                    ? "bg-blue-50 text-blue-700"
-                    : "text-slate-700 hover:bg-slate-50",
+                    ? "bg-[#CC8400]/10 text-[#CC8400] border-l-[3px] border-[#CC8400]"
+                    : "text-white/60 hover:text-white hover:bg-white/5",
                 ].join(" ")
               }
               aria-current={({ isActive }) => (isActive ? "page" : undefined)}
@@ -78,8 +72,8 @@ export default function SideBarCompte() {
                 <>
                   <span
                     className={[
-                      "grid h-9 w-9 place-items-center rounded-full",
-                      isActive ? "bg-blue-100 text-blue-700" : color,
+                      "grid h-9 w-9 place-items-center rounded-lg transition-colors",
+                      isActive ? "bg-[#CC8400]/20 text-[#CC8400]" : "bg-white/5 text-white/40 group-hover:text-white/80 group-hover:bg-white/10",
                     ].join(" ")}
                   >
                     <Icon />
@@ -91,7 +85,7 @@ export default function SideBarCompte() {
                 </>
               )}
             </NavLink>
-          ))}
+          )})}
         </div>
       </nav>
     </aside>
@@ -136,14 +130,6 @@ function LinkIcon() {
     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M10 13a5 5 0 0 0 7.07 0l1.41-1.41a5 5 0 0 0-7.07-7.07L10 4" />
       <path d="M14 11a5 5 0 0 0-7.07 0L5.52 12.41a5 5 0 1 0 7.07 7.07L14 20" />
-    </svg>
-  );
-}
-function ShieldIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z" />
-      <path d="M9 12l2 2 4-4" />
     </svg>
   );
 }

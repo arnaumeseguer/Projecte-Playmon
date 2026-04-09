@@ -13,7 +13,7 @@ export default function PerfilCard({
   const planMapping = {
     basic: { label: "Basic", colorClass: "text-white", dotClass: "bg-gray-400", glow: "0 0 4px rgba(255,255,255,0.3)" },
     super: { label: "Super", colorClass: "text-[#ff9d00]", dotClass: "bg-[#ff9d00] shadow-[0_0_12px_rgba(255,157,0,0.6)]", glow: "0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)" },
-    master: { label: "Master", colorClass: "text-[#a855f7]", dotClass: "bg-[#a855f7] shadow-[0_0_12px_rgba(168,85,247,0.6)]", glow: "0 0 7px #a855f7, 0 0 14px rgba(168,85,247,0.4)" },
+    master: { label: "Master", colorClass: "text-[#ff9d00]", dotClass: "bg-[#ff9d00] shadow-[0_0_12px_rgba(255,157,0,0.6)]", glow: "0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)" },
   };
 
   const planInfo = planMapping[planRaw.toLowerCase()] || planMapping.basic;
@@ -25,7 +25,7 @@ export default function PerfilCard({
         <button
           type="button"
           onClick={onEditProfile}
-          className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/15 transition-colors"
+          className="rounded-full bg-white/10 px-6 py-2.5 text-sm font-bold text-white hover:bg-[#CC8400] transition-all duration-300 shadow-lg"
         >
           Editar perfil
         </button>
@@ -62,8 +62,8 @@ export default function PerfilCard({
 
         {/* Camps d'informació */}
         <div className="w-full max-w-3xl space-y-5">
-          <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
-            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Nom d'usuari</span>
+          <div className="flex flex-col rounded-2xl bg-white/[0.03] p-5 sm:p-6 text-left border border-white/5 shadow-sm transition-all hover:bg-white/[0.07] outline-none group/item">
+            <span className="text-xs sm:text-[10px] font-bold text-[#CC8400] uppercase tracking-widest mb-1 sm:mb-2 opacity-80 group-hover/item:opacity-100 transition-opacity">Nom d'usuari</span>
             <span 
               className={`text-xl sm:text-2xl font-semibold ${planInfo.colorClass}`}
               style={{ textShadow: planInfo.glow }}
@@ -75,18 +75,18 @@ export default function PerfilCard({
             </span>
           </div>
           
-          <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
-            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Nom</span>
+          <div className="flex flex-col rounded-2xl bg-white/[0.03] p-5 sm:p-6 text-left border border-white/5 shadow-sm transition-all hover:bg-white/[0.07] outline-none group/item">
+            <span className="text-xs sm:text-[10px] font-bold text-[#CC8400] uppercase tracking-widest mb-1 sm:mb-2 opacity-80 group-hover/item:opacity-100 transition-opacity">Nom</span>
             <span className="text-xl sm:text-2xl font-semibold text-white">{nom}</span>
           </div>
 
-          <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
-            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Correu electrònic</span>
+          <div className="flex flex-col rounded-2xl bg-white/[0.03] p-5 sm:p-6 text-left border border-white/5 shadow-sm transition-all hover:bg-white/[0.07] outline-none group/item">
+            <span className="text-xs sm:text-[10px] font-bold text-[#CC8400] uppercase tracking-widest mb-1 sm:mb-2 opacity-80 group-hover/item:opacity-100 transition-opacity">Correu electrònic</span>
             <span className="text-xl sm:text-2xl font-semibold text-white truncate">{correu}</span>
           </div>
 
-          <div className="flex flex-col rounded-2xl bg-white/5 p-5 sm:p-6 text-left ring-1 ring-white/10 shadow-sm transition-all hover:bg-white/10 outline-none">
-            <span className="text-xs sm:text-sm font-medium text-white/50 uppercase tracking-wider mb-1 sm:mb-2">Pla de subscripció</span>
+          <div className="flex flex-col rounded-2xl bg-white/[0.03] p-5 sm:p-6 text-left border border-white/5 shadow-sm transition-all hover:bg-white/[0.07] outline-none group/item">
+            <span className="text-xs sm:text-[10px] font-bold text-[#CC8400] uppercase tracking-widest mb-1 sm:mb-2 opacity-80 group-hover/item:opacity-100 transition-opacity">Pla de subscripció</span>
             <span className={`flex items-center gap-3 text-xl sm:text-2xl font-semibold ${planInfo.colorClass}`}>
               <span className={`h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full ${planInfo.dotClass}`}></span>
               {planInfo.label}
@@ -96,8 +96,8 @@ export default function PerfilCard({
 
         {/* Cercador */}
         <div className="mt-12 w-full max-w-3xl">
-          <div className="flex items-center gap-4 rounded-full bg-white/5 px-6 py-4 sm:py-5 ring-1 ring-white/10 focus-within:ring-white/30 focus-within:bg-white/10 transition-all shadow-inner">
-            <SearchIcon />
+          <div className="flex items-center gap-4 rounded-full bg-white/5 px-6 py-4 sm:py-5 border border-white/10 focus-within:border-[#CC8400]/50 focus-within:bg-white/10 transition-all shadow-inner group">
+            <SearchIcon className="group-focus-within:text-[#CC8400] transition-colors" />
             <input
               type="search"
               placeholder="Cerca al Compte"
@@ -110,9 +110,9 @@ export default function PerfilCard({
   );
 }
 
-function SearchIcon() {
+function SearchIcon({ className }) {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5 text-white/70" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg viewBox="0 0 24 24" className={`h-5 w-5 text-white/40 ${className}`} fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M21 21l-4.3-4.3" />
       <circle cx="11" cy="11" r="7" />
     </svg>
