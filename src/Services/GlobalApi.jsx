@@ -67,12 +67,30 @@ const mapMovie = (m) => {
     };
 };
 
+// ── Shuffle setmanal determinista ──────────────────────────────────────────
+// El seed canvia un cop per setmana. Dins la mateixa setmana, el resultat és
+// sempre el mateix independentment de quantes vegades es faci F5.
+const WEEK_SEED = Math.floor(Date.now() / (1000 * 60 * 60 * 24 * 7));
+
+// Pseudo-random basat en sinus (determinista amb seed fix)
+const seededRandom = (i) => {
+    const x = Math.sin(WEEK_SEED * 9301 + i * 49297 + 233) * 1000000;
+    return x - Math.floor(x);
+};
+
+const weeklyShuffledArray = (arr) =>
+    arr
+        .map((item, i) => ({ item, sort: seededRandom(i) }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ item }) => item);
+// ────────────────────────────────────────────────────────────────────────────
+
 // Wraps list response in { results: [...] } to match TMDB structure
 const mapResults = (res) => {
     let rawData = Array.isArray(res.data) ? res.data : (res.data.results || []);
     
-    // Mescla aleatòria massiva per garantir l'efecte de rotació constant (tendències que sempre canvien)
-    rawData = rawData.sort(() => 0.5 - Math.random());
+    // Mescla setmanal: el mateix ordre durant tota la setmana, canvia cada 7 dies
+    rawData = weeklyShuffledArray(rawData);
     
     return {
         ...res,
@@ -81,6 +99,7 @@ const mapResults = (res) => {
         } 
     };
 };
+
 
 // Maps single object response
 const mapSingle = (res) => {
@@ -136,8 +155,8 @@ const getMovies = () => axios.get(movieBaseUrl).then(mapResults);
 const getSeries = () => axios.get(seriesBaseUrl).then((res) => {
     let rawData = Array.isArray(res.data) ? res.data : (res.data.results || []);
     
-    // Mescla aleatòria per trencar la monotonia de la base de dades
-    rawData = rawData.sort(() => 0.5 - Math.random());
+    // Mescla setmanal: estable dins la setmana, canvia cada 7 dies
+    rawData = weeklyShuffledArray(rawData);
 
     return { ...res, data: { results: rawData.map(m => ({ ...mapMovie(m), media_type: 'tv' })) } };
 });
