@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 
 // Pantalles
-import PantallaReproduccio from '@/features/reproductor/pages/PantallaReproductor.jsx';
+import PantallaReproduccio from '@/features/reproductor/ui/PantallaReproduccio.jsx';
 import LoginSingup from '@/features/login/LoginSingup.jsx'
 import AdminDashboard from '@/features/Admin/Dashboard'
 import CompteLayout from '@/features/compte/perfil/layout/CompteLayout.jsx';
@@ -78,6 +78,11 @@ const App = () => {
           </Route>
 
           <Route path='/reproduccio/:id' element={<PantallaReproduccio />} />
+
+          <Route path="/play" element={<ProtectedRoute element={<PantallaReproduccio />} />}>
+            <Route path=":videoId" element={<PantallaReproduccio />} />
+            <Route path="trailer/:videoId" element={<PantallaReproduccio />} />
+          </Route>
 
           <Route path="/403" element={<Forbidden />} />
 
