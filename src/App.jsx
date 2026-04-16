@@ -78,6 +78,7 @@ const App = () => {
           </Route>
 
           <Route path='/reproduccio/:id' element={<PantallaReproduccio />} />
+          <Route path='/watch' element={<ProtectedRoute element={<PantallaReproduccio />} />} />
 
           <Route path="/play" element={<ProtectedRoute element={<PantallaReproduccio />} />}>
             <Route path=":videoId" element={<PantallaReproduccio />} />

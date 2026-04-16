@@ -41,7 +41,10 @@ export function usePlayerController({ fonts }) {
         setErrorCarrega(null);
         if (!fonts) return;
         const res = await controlador.carregaFonts(fonts);
-        if (viu) setFontActiva(res.fontCarregada);
+        if (viu) {
+          setFontActiva(res.fontCarregada);
+          await controlador.play();
+        }
       } catch (e) {
         if (viu) setErrorCarrega(e);
       }

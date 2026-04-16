@@ -1,16 +1,31 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { HiPlus, HiCheck } from 'react-icons/hi'
 import { HiShare, HiPlayCircle } from 'react-icons/hi2'
 import TrailerModal from './TrailerModal'
 
 // ── ActionButtons ──────────────────────────────────────────────────────────────
 function ActionButtons({ movie }) {
+    const navigate = useNavigate()
     const [inList, setInList] = useState(false)
     const [copied, setCopied] = useState(false)
     const [showTrailer, setShowTrailer] = useState(false)
 
     const trailerKey = movie?.videos?.results?.find(v => v.type === 'Trailer' && v.site === 'YouTube')?.key
         || movie?.videos?.results?.find(v => v.site === 'YouTube')?.key
+
+    const handlePlay = () => {
+        navigate('/watch', {
+            state: {
+                titol: movie.title || movie.name || 'Sense títol',
+                poster: movie.poster_path || '',
+                fonts: { hls: null, mp4: 'https://res.cloudinary.com/dm5tr3lwj/video/upload/v1772727103/playmon/playmon/arnau/03488cf4.mp4' },
+                any: (movie.release_date || movie.first_air_date || '').slice(0, 4) || null,
+                genere: movie.genres?.[0]?.name || null,
+                duracioText: null,
+            }
+        })
+    }
 
     useEffect(() => {
         if (!movie) return
@@ -62,8 +77,9 @@ function ActionButtons({ movie }) {
                                bg-white text-black font-bold text-sm md:text-base
                                hover:bg-white/90 transition-all duration-200
                                shadow-lg hover:shadow-xl hover:scale-105 active:scale-95'
-                    title='Funció de reproducció pendent'
-                    onClick={() => {}}
+                    title='Reproduir'
+                    onClick={handlePlay}
+                    disabled={false}
                 >
                     <HiPlayCircle className='text-2xl flex-shrink-0' />
                     Reproduir
