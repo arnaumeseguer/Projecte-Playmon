@@ -4,6 +4,12 @@ import { HiPlus, HiCheck } from 'react-icons/hi'
 import { HiShare, HiPlayCircle } from 'react-icons/hi2'
 import TrailerModal from './TrailerModal'
 
+const FAKE_VIDEOS = [
+    'https://res.cloudinary.com/dm5tr3lwj/video/upload/v1772727103/playmon/playmon/arnau/03488cf4.mp4',
+    'https://res.cloudinary.com/dm5tr3lwj/video/upload/v1772478821/playmon/playmon/arnau/8bb6e0cf.mp4',
+    'https://res.cloudinary.com/dm5tr3lwj/video/upload/v1772561885/playmon/playmon/arnau/1453dd56.webm'
+];
+
 // ── ActionButtons ──────────────────────────────────────────────────────────────
 function ActionButtons({ movie }) {
     const navigate = useNavigate()
@@ -20,7 +26,7 @@ function ActionButtons({ movie }) {
                 id: movie.id,
                 titol: movie.title || movie.name || 'Sense títol',
                 poster: movie.poster_path || '',
-                fonts: { hls: null, mp4: 'https://res.cloudinary.com/dm5tr3lwj/video/upload/v1772727103/playmon/playmon/arnau/03488cf4.mp4' },
+                fonts: { hls: null, mp4: FAKE_VIDEOS[Math.abs(movie.id || 0) % FAKE_VIDEOS.length] },
                 any: (movie.release_date || movie.first_air_date || '').slice(0, 4) || null,
                 genere: movie.genres?.[0]?.name || null,
                 duracioText: null,
