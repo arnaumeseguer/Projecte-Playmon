@@ -279,6 +279,65 @@ function ContentRow({ title, subtitle, badge, badgeColor, color, genreId, type, 
     )
 }
 
+// ── Fila de Seguir Veient ───────────────────────────────────────────────────────
+function ContinueWatchingRow() {
+    const [savedItem, setSavedItem] = useState(null);
+
+    useEffect(() => {
+        const checkStorage = () => {
+            const saved = localStorage.getItem('playmon_continue');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (!parsed.id || parsed.id === 'undefined') {
+                        setSavedItem(null);
+                        localStorage.removeItem('playmon_continue');
+                    } else {
+                        setSavedItem(parsed);
+                    }
+                } catch (e) {
+                    setSavedItem(null);
+                }
+            } else {
+                setSavedItem(null);
+            }
+        };
+        // Check initially
+        checkStorage();
+        // Check when window focuses, in case they return from player
+        window.addEventListener('focus', checkStorage);
+        return () => window.removeEventListener('focus', checkStorage);
+    }, []);
+
+    if (!savedItem) return null;
+
+    return (
+        <section className='group/row px-6 md:px-12 py-6'>
+            <div className='flex items-end justify-between mb-4'>
+                <div className='flex flex-col gap-1'>
+                    <h2 className='text-white font-bold text-xl leading-tight'>Seguir viendo</h2>
+                    <p className='text-[#CC8400] text-xs font-normal'>Reprendre per on ho vas deixar</p>
+                </div>
+            </div>
+
+            <div className='flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory' style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                <div className='flex-shrink-0 group/card relative snap-start w-[200px] md:w-[280px]'>
+                    <MovieCard movie={savedItem} isContinueWatching={true} />
+                    {/* Barra de progrés visual sobre la targeta */}
+                    {savedItem.savedTime > 0 && (
+                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 rounded-b-lg overflow-hidden z-10 pointer-events-none">
+                            {/* Assumim que el video dura 7 segons aproximadament. Si no sabem la durada, o usem un % fix o 7. */}
+                            <div className="h-full bg-[#CC8400]" style={{ width: `${Math.min(100, (savedItem.savedTime / 7) * 100)}%` }}></div>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <div className='mt-6 h-px bg-white/5' />
+        </section>
+    );
+}
+
 // ── HomeLayout ─────────────────────────────────────────────────────────────────
 function HomeLayout() {
     return (
@@ -286,6 +345,7 @@ function HomeLayout() {
             <Header />
             <main className='pb-10'>
                 <Slider />
+                <ContinueWatchingRow />
                 <div className='mt-6'>
                     {CATEGORIES.map((cat, i) => (
                         <ContentRow key={i} {...cat} />

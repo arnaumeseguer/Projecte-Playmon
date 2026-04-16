@@ -1,16 +1,50 @@
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { useVideoAsset } from "../hooks/useVideoAssets";
 import Reproductor from "./Reproductor";
 
 export default function PantallaReproduccio() {
-  const { id } = useParams();
+  const params = useParams();
+  const urlId = params.id || params.videoId;
   const navigate = useNavigate();
   const location = useLocation();
 
   const videoDirecte = location.state?.fonts ? location.state : null;
-  const { dades: videoBD, carregant, error } = useVideoAsset(videoDirecte ? null : id);
+  const { dades: videoBD, carregant, error } = useVideoAsset(videoDirecte ? null : urlId);
 
   const video = videoDirecte ?? videoBD;
+
+  const [initialTime] = useState(() => {
+    const saved = localStorage.getItem('playmon_continue');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const currentId = videoDirecte ? videoDirecte.id : urlId;
+        if (String(parsed.id) === String(currentId)) {
+          return Number(parsed.savedTime);
+        }
+      } catch (e) {}
+    }
+    return 0;
+  });
+
+  const handleTimeUpdate = (time) => {
+    if (!video) return;
+    const mediaType = location.pathname.includes('/tv') ? 'tv' : 'movie';
+    const currentId = videoDirecte ? videoDirecte.id : urlId;
+    
+    if (time > 0) {
+      localStorage.setItem('playmon_continue', JSON.stringify({
+        id: currentId,
+        title: video.titol,
+        name: video.titol,
+        backdrop_path: video.poster,
+        poster_path: video.poster,
+        media_type: mediaType,
+        savedTime: time
+      }));
+    }
+  };
 
   if (!videoDirecte && carregant) {
     return (
@@ -44,8 +78,13 @@ export default function PantallaReproduccio() {
         titol={video.titol}
         poster={video.poster}
         fonts={video.fonts}
+        initialTime={initialTime}
+        onTimeUpdate={handleTimeUpdate}
         onTornar={() => navigate(-1)}
-        onFinal={() => console.log("Final")}
+        onFinal={() => {
+            localStorage.removeItem('playmon_continue');
+            navigate(-1);
+        }}
       />
 
       <div className="mx-auto w-full max-w-[1100px] px-5 py-6">

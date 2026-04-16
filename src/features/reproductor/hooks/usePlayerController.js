@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ControladorPlayer } from "../player/controlador/ControladorPlayer";
 
-export function usePlayerController({ fonts }) {
+export function usePlayerController({ fonts, initialTime = 0 }) {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -43,6 +43,9 @@ export function usePlayerController({ fonts }) {
         const res = await controlador.carregaFonts(fonts);
         if (viu) {
           setFontActiva(res.fontCarregada);
+          if (initialTime > 0) {
+            controlador.seekTo(initialTime);
+          }
           await controlador.play();
         }
       } catch (e) {

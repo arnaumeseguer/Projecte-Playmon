@@ -17,6 +17,7 @@ function ActionButtons({ movie }) {
     const handlePlay = () => {
         navigate('/watch', {
             state: {
+                id: movie.id,
                 titol: movie.title || movie.name || 'Sense títol',
                 poster: movie.poster_path || '',
                 fonts: { hls: null, mp4: 'https://res.cloudinary.com/dm5tr3lwj/video/upload/v1772727103/playmon/playmon/arnau/03488cf4.mp4' },

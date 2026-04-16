@@ -6,7 +6,7 @@ import TrailerModal from '@/features/detail/components/TrailerModal.jsx'
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
 
-function MovieCard({ movie }) {
+function MovieCard({ movie, isContinueWatching = false }) {
     const navigate = useNavigate()
     const [isHovered, setIsHovered] = useState(false)
     const [cardRect, setCardRect] = useState(null)
@@ -42,6 +42,21 @@ function MovieCard({ movie }) {
         const isTv = movie.media_type === 'tv' || (!movie.title && movie.name)
         const type = isTv ? 'tv' : 'movie'
         navigate(`/${type}/${movie.id}`)
+    }
+
+    const handlePlay = (e) => {
+        e.stopPropagation()
+        navigate('/watch', {
+            state: {
+                id: movie.id,
+                titol: movie.title || movie.name || 'Sense títol',
+                poster: movie.backdrop_path || movie.poster_path || '',
+                fonts: { hls: null, mp4: 'https://res.cloudinary.com/dm5tr3lwj/video/upload/v1772727103/playmon/playmon/arnau/03488cf4.mp4' },
+                any: (movie.release_date || movie.first_air_date || '').slice(0, 4) || null,
+                genere: movie.genres?.[0]?.name || null,
+                duracioText: null,
+            }
+        })
     }
 
     const imagePath = movie.backdrop_path || movie.poster_path
@@ -127,11 +142,11 @@ function MovieCard({ movie }) {
                 <h3 className="text-white font-bold text-sm md:text-base line-clamp-1">{movie.title || movie.name}</h3>
                 
                 <div className="flex items-center gap-2 mt-1">
-                    <button onClick={(e) => { e.stopPropagation(); handleClick(); }} 
-                            title="Reproduir"
+                    <button onClick={handlePlay} 
+                            title={isContinueWatching ? "Reprendre" : "Reproduir"}
                             className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-md bg-white text-black font-semibold hover:bg-[#CC8400] hover:text-white transition-colors">
                         <HiPlayCircle className="text-2xl" />
-                        <span className="text-xs md:text-sm">Reproduir</span>
+                        <span className="text-xs md:text-sm">{isContinueWatching ? "Reprendre" : "Reproduir"}</span>
                     </button>
                     {trailerKey && (
                         <button onClick={(e) => { e.stopPropagation(); setIsHovered(false); setShowTrailer(true); }}
