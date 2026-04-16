@@ -27,6 +27,12 @@ import TvDetailPage from '@/features/detail/TvDetailPage';
 import MoviesPage from '@/features/movies/MoviesPage';
 import SeriesPage from '@/features/series/SeriesPage';
 
+// Admin Pages
+import AdminStats from '@/features/Admin/pages/AdminStats.jsx';
+import AdminUsers from '@/features/Admin/pages/AdminUsers.jsx';
+import AdminMultimedia from '@/features/Admin/pages/AdminMultimedia.jsx';
+import AdminNotifications from '@/features/Admin/pages/AdminNotifications.jsx';
+
 const App = () => {
   return (
     <Router>
@@ -63,21 +69,13 @@ const App = () => {
           <Route path="/login"
             element={<LoginSingup />}
           />
-          <Route path="/dashboard"
-            element={<Navigate to="/dashboard/users" replace />}
-          />
-          <Route path="/dashboard/users"
-            element={<ProtectedRoute element={<AdminDashboard />} requiredRole="admin" />}
-          />
-          <Route path="/dashboard/admins"
-            element={<ProtectedRoute element={<AdminDashboard />} requiredRole="admin" />}
-          />
-          <Route path="/dashboard/videos"
-            element={<ProtectedRoute element={<AdminDashboard />} requiredRole="admin" />}
-          />
-          <Route path="/dashboard/public-videos"
-            element={<ProtectedRoute element={<AdminDashboard />} requiredRole="admin" />}
-          />
+          <Route path="/dashboard" element={<ProtectedRoute element={<AdminDashboard />} requiredRole="admin" />}>
+            <Route index element={<Navigate to="stats" replace />} />
+            <Route path="stats" element={<AdminStats />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="multimedia" element={<AdminMultimedia />} />
+            <Route path="notificacions" element={<AdminNotifications />} />
+          </Route>
 
           <Route path='/reproduccio/:id' element={<PantallaReproduccio />} />
 
