@@ -290,7 +290,8 @@ function ContinueWatchingRow() {
                 try {
                     const parsed = JSON.parse(saved);
                     // Suportem tant el format antic de 1 objecte sol com el format de llista
-                    const history = Array.isArray(parsed) ? parsed : (parsed?.id && parsed.id !== 'undefined' ? [parsed] : []);
+                    let history = Array.isArray(parsed) ? parsed : (parsed?.id && parsed.id !== 'undefined' ? [parsed] : []);
+                    history = history.filter(item => !item.completed);
                     setSavedItems(history);
                 } catch (e) {
                     setSavedItems([]);

@@ -19,6 +19,11 @@ const items = [
     Icon: BookmarkIcon,
   },
   {
+    to: "/compte/historial",
+    label: "Historial de visualització",
+    Icon: HistoryIcon,
+  },
+  {
     to: "/compte/seguretat",
     label: "Seguretat i inici de sessió",
     Icon: LockIcon,
@@ -177,6 +182,14 @@ function LogoutIcon() {
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
       <polyline points="16 17 21 12 16 7" />
       <line x1="21" y1="12" x2="9" y2="12" />
+    </svg>
+  );
+}
+
+function HistoryIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   );
 }
