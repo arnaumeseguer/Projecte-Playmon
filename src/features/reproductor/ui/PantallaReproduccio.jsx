@@ -41,7 +41,8 @@ export default function PantallaReproduccio() {
         backdrop_path: video.poster,
         poster_path: video.poster,
         media_type: mediaType,
-        savedTime: time
+        savedTime: time,
+        completed: false
       };
 
       try {
@@ -53,7 +54,7 @@ export default function PantallaReproduccio() {
         }
         history = history.filter(item => String(item.id) !== String(currentId));
         history.unshift(newItem);
-        localStorage.setItem('playmon_continue', JSON.stringify(history.slice(0, 15)));
+        localStorage.setItem('playmon_continue', JSON.stringify(history.slice(0, 100)));
       } catch (e) {}
     }
   };
@@ -100,11 +101,12 @@ export default function PantallaReproduccio() {
                 const parsed = JSON.parse(saved);
                 let history = Array.isArray(parsed) ? parsed : (parsed?.id ? [parsed] : []);
                 const currentId = videoDirecte ? videoDirecte.id : urlId;
-                history = history.filter(item => String(item.id) !== String(currentId));
-                if (history.length > 0) {
+                
+                const itemIndex = history.findIndex(item => String(item.id) === String(currentId));
+                if (itemIndex > -1) {
+                  history[itemIndex].completed = true;
+                  history[itemIndex].savedTime = 0;
                   localStorage.setItem('playmon_continue', JSON.stringify(history));
-                } else {
-                  localStorage.removeItem('playmon_continue');
                 }
               }
             } catch (e) {}
