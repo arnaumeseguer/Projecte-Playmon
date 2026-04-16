@@ -20,12 +20,15 @@ export default function CompteInformacioPersonal({onChangePhoto}) {
     darrerCanviContrasenya: "11 de des. 2022",
   };
 
+  const planClean = (user.plan || "").toLowerCase().trim();
+  const normalizedPlan = planClean === 'super' ? 'ultra' : planClean;
+
   const planMapping = {
     basic: { color: "text-white", glow: "0 0 4px rgba(255,255,255,0.3)" },
-    super: { color: "text-[#ff9d00]", glow: "0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)" },
+    ultra: { color: "text-[#ff9d00]", glow: "0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)" },
     master: { color: "text-[#ff9d00]", glow: "0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)" },
   };
-  const planInfo = planMapping[user.plan.toLowerCase()] || planMapping.basic;
+  const planInfo = planMapping[normalizedPlan] || planMapping.basic;
   const nameColorClass = planInfo.color;
   const nameGlowStyle = planInfo.glow;
 
@@ -60,7 +63,7 @@ export default function CompteInformacioPersonal({onChangePhoto}) {
           valor={
             <>
               {user.usuari}
-              {user.plan.toLowerCase() === 'master' && (
+              {normalizedPlan === 'master' && (
                 <span className="ml-2 text-white inline-block drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">★</span>
               )}
             </>

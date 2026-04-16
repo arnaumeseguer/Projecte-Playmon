@@ -1,5 +1,6 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { HiShieldCheck as ShieldIcon } from "react-icons/hi2";
+import { logout } from "@/api/authApi";
 
 const items = [
   {
@@ -40,6 +41,13 @@ const items = [
 ];
 
 export default function SideBarCompte() {
+  const navigate = useNavigate();
+
+  const tancarSessio = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
     <aside className="self-start">
       <div className="mb-4 pl-4 text-[11px] font-bold uppercase tracking-wider text-white/40">
@@ -86,6 +94,21 @@ export default function SideBarCompte() {
               )}
             </NavLink>
           )})}
+
+          {/* Separador */}
+          <div className="my-1 h-px bg-white/10" />
+
+          {/* Tancar sessió */}
+          <button
+            type="button"
+            onClick={tancarSessio}
+            className="group flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-left text-sm text-white/60 transition-all duration-300 hover:bg-red-500/10 hover:text-red-400"
+          >
+            <span className="grid h-9 w-9 place-items-center rounded-lg bg-white/5 text-white/40 transition-colors group-hover:bg-red-500/20 group-hover:text-red-400">
+              <LogoutIcon />
+            </span>
+            <span className="font-medium">Tancar sessió</span>
+          </button>
         </div>
       </nav>
     </aside>
@@ -145,6 +168,15 @@ function BookmarkIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+    </svg>
+  );
+}
+function LogoutIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <polyline points="16 17 21 12 16 7" />
+      <line x1="21" y1="12" x2="9" y2="12" />
     </svg>
   );
 }

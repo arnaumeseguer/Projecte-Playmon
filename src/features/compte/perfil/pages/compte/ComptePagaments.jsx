@@ -20,8 +20,8 @@ const PLAN_DETAILS = {
       "Amb anuncis",
     ],
   },
-  super: {
-    key: "super",
+  ultra: {
+    key: "ultra",
     title: "Pla Ultra",
     price: "5.99",
     description: "La millor opció qualitat-preu per a veure i crear contingut sense anuncis.",
@@ -54,6 +54,8 @@ const PLAN_DETAILS = {
 
 function normalizePlanKey(rawPlan) {
   const plan = (rawPlan || "basic").toLowerCase().trim();
+  // Handle 'super' -> 'ultra' mapping if old data exists
+  if (plan === 'super') return 'ultra';
   if (plan in PLAN_DETAILS) return plan;
   return "basic";
 }

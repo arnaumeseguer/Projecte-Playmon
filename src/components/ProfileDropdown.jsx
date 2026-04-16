@@ -44,7 +44,9 @@ export default function ProfileDropdown({ mostrarMenu = true }) {
   const nomUsuari = user?.name ?? user?.username ?? "Usuari";
   const avatarUsuari = user?.avatar ?? defaultAvatar;
   const esAdmin = (user?.role || "").toLowerCase() === "admin";
-  const isPremium = user?.pla_pagament === 'master'; // L'estrella ★ és exclusiva del Pla Master
+  const planPagament = (user?.pla_pagament || "").toLowerCase().trim();
+  const isPremium = planPagament === "master";
+  const isUltra = planPagament === "ultra" || planPagament === "super";
 
   const inicials = useMemo(() => {
     const n = (nomUsuari || "U").trim();
@@ -97,11 +99,19 @@ export default function ProfileDropdown({ mostrarMenu = true }) {
         className="flex items-center gap-2 rounded-full px-3 py-1.5 hover:bg-white/5 transition-all focus:outline-none ring-1 ring-white/10"
       >
         <span 
-          className={`hidden text-sm sm:block transition-all ${
-            isPremium ? 'text-[#ff9d00] font-bold' : 'text-white font-semibold'
+          className={`hidden text-sm sm:block transition-all font-bold ${
+            isPremium
+              ? 'text-[#ff9d00]'
+              : isUltra
+              ? 'text-[#3b9eff]'
+              : 'text-white font-semibold'
           }`}
           style={{
-            textShadow: isPremium ? '0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)' : '0 0 4px rgba(255,255,255,0.3)'
+            textShadow: isPremium
+              ? '0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)'
+              : isUltra
+              ? '0 0 7px #3b9eff, 0 0 14px rgba(59,158,255,0.4)'
+              : '0 0 4px rgba(255,255,255,0.3)'
           }}
         >
           {nomUsuari}
@@ -114,7 +124,11 @@ export default function ProfileDropdown({ mostrarMenu = true }) {
           src={avatarUsuari}
           alt=""
           className={`h-8 w-8 rounded-full object-cover transition-all ${
-            isPremium ? 'ring-2 ring-[#ff9d00]' : 'ring-1 ring-white/20'
+            isPremium
+              ? 'ring-2 ring-[#ff9d00]'
+              : isUltra
+              ? 'ring-2 ring-[#3b9eff]'
+              : 'ring-1 ring-white/20'
           }`}
         />
 
