@@ -65,7 +65,7 @@ export const SubscriptionPlans = ({ onSelectPlan }) => {
     {
       id: "basic",
       title: "Pla Bàsic",
-      price: "0",
+      price: 0,
       icon: FiLayers,
       color: "from-gray-500 to-gray-700",
       features: [
@@ -80,7 +80,7 @@ export const SubscriptionPlans = ({ onSelectPlan }) => {
     {
       id: "super",
       title: "Pla Super",
-      price: "5.99",
+      price: 5.99,
       recommended: true,
       icon: FiZap,
       color: "from-[#3b9eff] to-[#2563eb]",
@@ -96,7 +96,7 @@ export const SubscriptionPlans = ({ onSelectPlan }) => {
     {
       id: "ultra",
       title: "Pla Ultra",
-      price: "12.99",
+      price: 12.99,
       icon: FiStar,
       color: "from-[#CC8400] to-[#FFD700]",
       features: [
