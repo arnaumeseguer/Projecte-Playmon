@@ -89,8 +89,6 @@ export default function Reproductor({ titol, poster, fonts, onTornar, onFinal })
         ref={videoRef}
         className="relative h-screen w-full bg-black object-contain"
         playsInline
-        // important per CORS si tens CDN separat:
-        crossOrigin="anonymous"
       />
 
       {/* Top bar (Disney+ style) */}

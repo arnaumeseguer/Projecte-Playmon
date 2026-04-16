@@ -1,14 +1,18 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useVideoAsset } from "../hooks/useVideoAssets";
 import Reproductor from "./Reproductor";
 
 export default function PantallaReproduccio() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const { dades: video, carregant, error } = useVideoAsset(id);
+  const videoDirecte = location.state?.fonts ? location.state : null;
+  const { dades: videoBD, carregant, error } = useVideoAsset(videoDirecte ? null : id);
 
-  if (carregant) {
+  const video = videoDirecte ?? videoBD;
+
+  if (!videoDirecte && carregant) {
     return (
       <div className="min-h-screen bg-black text-white grid place-items-center">
         <div className="text-sm text-white/70">Carregant…</div>
@@ -16,7 +20,7 @@ export default function PantallaReproduccio() {
     );
   }
 
-  if (error) {
+  if (!videoDirecte && error) {
     return (
       <div className="min-h-screen bg-black text-white grid place-items-center px-6">
         <div className="w-full max-w-lg rounded-2xl bg-white/5 p-5 ring-1 ring-white/10">
