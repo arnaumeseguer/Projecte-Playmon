@@ -6,6 +6,12 @@ import TrailerModal from '@/features/detail/components/TrailerModal.jsx'
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
 
+const FAKE_VIDEOS = [
+    'https://res.cloudinary.com/dm5tr3lwj/video/upload/v1772727103/playmon/playmon/arnau/03488cf4.mp4',
+    'https://res.cloudinary.com/dm5tr3lwj/video/upload/v1772478821/playmon/playmon/arnau/8bb6e0cf.mp4',
+    'https://res.cloudinary.com/dm5tr3lwj/video/upload/v1772561885/playmon/playmon/arnau/1453dd56.webm'
+];
+
 function MovieCard({ movie, isContinueWatching = false }) {
     const navigate = useNavigate()
     const [isHovered, setIsHovered] = useState(false)
@@ -51,7 +57,7 @@ function MovieCard({ movie, isContinueWatching = false }) {
                 id: movie.id,
                 titol: movie.title || movie.name || 'Sense títol',
                 poster: movie.backdrop_path || movie.poster_path || '',
-                fonts: { hls: null, mp4: 'https://res.cloudinary.com/dm5tr3lwj/video/upload/v1772727103/playmon/playmon/arnau/03488cf4.mp4' },
+                fonts: { hls: null, mp4: FAKE_VIDEOS[Math.abs(movie.id || 0) % FAKE_VIDEOS.length] },
                 any: (movie.release_date || movie.first_air_date || '').slice(0, 4) || null,
                 genere: movie.genres?.[0]?.name || null,
                 duracioText: null,

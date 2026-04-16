@@ -281,7 +281,7 @@ function ContentRow({ title, subtitle, badge, badgeColor, color, genreId, type, 
 
 // ── Fila de Seguir Veient ───────────────────────────────────────────────────────
 function ContinueWatchingRow() {
-    const [savedItem, setSavedItem] = useState(null);
+    const [savedItems, setSavedItems] = useState([]);
 
     useEffect(() => {
         const checkStorage = () => {
@@ -289,27 +289,22 @@ function ContinueWatchingRow() {
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-                    if (!parsed.id || parsed.id === 'undefined') {
-                        setSavedItem(null);
-                        localStorage.removeItem('playmon_continue');
-                    } else {
-                        setSavedItem(parsed);
-                    }
+                    // Suportem tant el format antic de 1 objecte sol com el format de llista
+                    const history = Array.isArray(parsed) ? parsed : (parsed?.id && parsed.id !== 'undefined' ? [parsed] : []);
+                    setSavedItems(history);
                 } catch (e) {
-                    setSavedItem(null);
+                    setSavedItems([]);
                 }
             } else {
-                setSavedItem(null);
+                setSavedItems([]);
             }
         };
-        // Check initially
         checkStorage();
-        // Check when window focuses, in case they return from player
         window.addEventListener('focus', checkStorage);
         return () => window.removeEventListener('focus', checkStorage);
     }, []);
 
-    if (!savedItem) return null;
+    if (savedItems.length === 0) return null;
 
     return (
         <section className='group/row px-6 md:px-12 py-6'>
@@ -320,17 +315,17 @@ function ContinueWatchingRow() {
                 </div>
             </div>
 
-            <div className='flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory' style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                <div className='flex-shrink-0 group/card relative snap-start w-[200px] md:w-[280px]'>
-                    <MovieCard movie={savedItem} isContinueWatching={true} />
-                    {/* Barra de progrés visual sobre la targeta */}
-                    {savedItem.savedTime > 0 && (
-                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 rounded-b-lg overflow-hidden z-10 pointer-events-none">
-                            {/* Assumim que el video dura 7 segons aproximadament. Si no sabem la durada, o usem un % fix o 7. */}
-                            <div className="h-full bg-[#CC8400]" style={{ width: `${Math.min(100, (savedItem.savedTime / 7) * 100)}%` }}></div>
-                        </div>
-                    )}
-                </div>
+            <div className='flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4' style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                {savedItems.map((item, i) => (
+                    <div key={item.id || i} className='flex-shrink-0 group/card relative snap-start w-[200px] md:w-[280px]'>
+                        <MovieCard movie={item} isContinueWatching={true} />
+                        {item.savedTime > 0 && (
+                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 rounded-b-lg overflow-hidden z-10 pointer-events-none">
+                                <div className="h-full bg-[#CC8400]" style={{ width: `${Math.min(100, (item.savedTime / 7) * 100)}%` }}></div>
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
 
             <div className='mt-6 h-px bg-white/5' />

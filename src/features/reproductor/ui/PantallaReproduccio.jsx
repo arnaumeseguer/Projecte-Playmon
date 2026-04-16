@@ -20,9 +20,9 @@ export default function PantallaReproduccio() {
       try {
         const parsed = JSON.parse(saved);
         const currentId = videoDirecte ? videoDirecte.id : urlId;
-        if (String(parsed.id) === String(currentId)) {
-          return Number(parsed.savedTime);
-        }
+        const history = Array.isArray(parsed) ? parsed : (parsed?.id ? [parsed] : []);
+        const item = history.find(p => String(p.id) === String(currentId));
+        if (item) return Number(item.savedTime);
       } catch (e) {}
     }
     return 0;
@@ -34,7 +34,7 @@ export default function PantallaReproduccio() {
     const currentId = videoDirecte ? videoDirecte.id : urlId;
     
     if (time > 0) {
-      localStorage.setItem('playmon_continue', JSON.stringify({
+      const newItem = {
         id: currentId,
         title: video.titol,
         name: video.titol,
@@ -42,7 +42,19 @@ export default function PantallaReproduccio() {
         poster_path: video.poster,
         media_type: mediaType,
         savedTime: time
-      }));
+      };
+
+      try {
+        const saved = localStorage.getItem('playmon_continue');
+        let history = [];
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          history = Array.isArray(parsed) ? parsed : (parsed?.id ? [parsed] : []);
+        }
+        history = history.filter(item => String(item.id) !== String(currentId));
+        history.unshift(newItem);
+        localStorage.setItem('playmon_continue', JSON.stringify(history.slice(0, 15)));
+      } catch (e) {}
     }
   };
 
@@ -82,7 +94,20 @@ export default function PantallaReproduccio() {
         onTimeUpdate={handleTimeUpdate}
         onTornar={() => navigate(-1)}
         onFinal={() => {
-            localStorage.removeItem('playmon_continue');
+            try {
+              const saved = localStorage.getItem('playmon_continue');
+              if (saved) {
+                const parsed = JSON.parse(saved);
+                let history = Array.isArray(parsed) ? parsed : (parsed?.id ? [parsed] : []);
+                const currentId = videoDirecte ? videoDirecte.id : urlId;
+                history = history.filter(item => String(item.id) !== String(currentId));
+                if (history.length > 0) {
+                  localStorage.setItem('playmon_continue', JSON.stringify(history));
+                } else {
+                  localStorage.removeItem('playmon_continue');
+                }
+              }
+            } catch (e) {}
             navigate(-1);
         }}
       />
