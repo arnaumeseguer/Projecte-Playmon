@@ -45,8 +45,8 @@ export default function ProfileDropdown({ mostrarMenu = true }) {
   const avatarUsuari = user?.avatar ?? defaultAvatar;
   const esAdmin = (user?.role || "").toLowerCase() === "admin";
   const planPagament = (user?.pla_pagament || "").toLowerCase().trim();
-  const isPremium = planPagament === "master";
-  const isUltra = planPagament === "ultra" || planPagament === "super";
+  const isUltra = planPagament === "ultra";
+  const isSuper = planPagament === "super";
 
   const inicials = useMemo(() => {
     const n = (nomUsuari || "U").trim();
@@ -100,22 +100,22 @@ export default function ProfileDropdown({ mostrarMenu = true }) {
       >
         <span 
           className={`hidden text-sm sm:block transition-all font-bold ${
-            isPremium
+            isUltra
               ? 'text-[#ff9d00]'
-              : isUltra
+              : isSuper
               ? 'text-[#3b9eff]'
               : 'text-white font-semibold'
           }`}
           style={{
-            textShadow: isPremium
+            textShadow: isUltra
               ? '0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)'
-              : isUltra
+              : isSuper
               ? '0 0 7px #3b9eff, 0 0 14px rgba(59,158,255,0.4)'
               : '0 0 4px rgba(255,255,255,0.3)'
           }}
         >
           {nomUsuari}
-          {isPremium && (
+          {isUltra && (
             <span className="ml-1 text-white inline-block drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">★</span>
           )}
         </span>
@@ -124,9 +124,9 @@ export default function ProfileDropdown({ mostrarMenu = true }) {
           src={avatarUsuari}
           alt=""
           className={`h-8 w-8 rounded-full object-cover transition-all ${
-            isPremium
+            isUltra
               ? 'ring-2 ring-[#ff9d00]'
-              : isUltra
+              : isSuper
               ? 'ring-2 ring-[#3b9eff]'
               : 'ring-1 ring-white/20'
           }`}

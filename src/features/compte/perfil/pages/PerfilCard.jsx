@@ -9,12 +9,12 @@ export default function PerfilCard({
   const avatar = user?.avatar ?? null;
   const username = user?.username ?? "@nomusuari";
   const planRaw = (user?.plan || user?.pla_pagament || "basic").toLowerCase().trim();
-  const normalizedPlan = planRaw === 'super' ? 'ultra' : planRaw;
+  const normalizedPlan = planRaw;
 
   const planMapping = {
     basic: { label: "Basic", colorClass: "text-white", dotClass: "bg-gray-400", glow: "0 0 4px rgba(255,255,255,0.3)" },
-    ultra: { label: "Ultra", colorClass: "text-[#3b9eff]", dotClass: "bg-[#3b9eff] shadow-[0_0_12px_rgba(59,158,255,0.6)]", glow: "0 0 7px #3b9eff, 0 0 14px rgba(59,158,255,0.4)" },
-    master: { label: "Master", colorClass: "text-[#ff9d00]", dotClass: "bg-[#ff9d00] shadow-[0_0_12px_rgba(255,157,0,0.6)]", glow: "0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)" },
+    super: { label: "Super", colorClass: "text-[#3b9eff]", dotClass: "bg-[#3b9eff] shadow-[0_0_12px_rgba(59,158,255,0.6)]", glow: "0 0 7px #3b9eff, 0 0 14px rgba(59,158,255,0.4)" },
+    ultra: { label: "Ultra", colorClass: "text-[#ff9d00]", dotClass: "bg-[#ff9d00] shadow-[0_0_12px_rgba(255,157,0,0.6)]", glow: "0 0 7px #ff9d00, 0 0 14px rgba(255,157,0,0.4)" },
   };
 
   const planInfo = planMapping[normalizedPlan] || planMapping.basic;
@@ -70,7 +70,7 @@ export default function PerfilCard({
               style={{ textShadow: planInfo.glow }}
             >
               {username}
-              {normalizedPlan === 'master' && (
+              {normalizedPlan === 'ultra' && (
                 <span className="ml-2 text-white inline-block drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">★</span>
               )}
             </span>
