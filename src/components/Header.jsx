@@ -38,6 +38,7 @@ function Header() {
         {
             name: "PLAYMON ORIGINALS",
             icon: HiStar,
+            path: "/originals"
         },
         {
             name: "PELICULES",

@@ -27,6 +27,7 @@ import MovieDetailPage from '@/features/detail/MovieDetailPage';
 import TvDetailPage from '@/features/detail/TvDetailPage';
 import MoviesPage from '@/features/movies/MoviesPage';
 import SeriesPage from '@/features/series/SeriesPage';
+import OriginalsPage from '@/features/originals/OriginalsPage';
 
 // Admin Pages
 import AdminStats from '@/features/Admin/pages/AdminStats.jsx';
@@ -53,6 +54,9 @@ const App = () => {
           />
           <Route path="/series"
             element={<ProtectedRoute element={<SeriesPage />} />}
+          />
+          <Route path="/originals"
+            element={<ProtectedRoute element={<OriginalsPage />} />}
           />
 
           <Route path="/compte" element={<ProtectedRoute element={<CompteLayout />} />}>
