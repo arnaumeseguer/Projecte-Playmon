@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { HiFilm, HiTv, HiPlayCircle, HiPlus, HiCheck } from 'react-icons/hi2'
+import { HiFilm, HiTv, HiPlayCircle, HiPlus, HiCheck, HiStar } from 'react-icons/hi2'
 import TrailerModal from '@/features/detail/components/TrailerModal.jsx'
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original"
@@ -17,6 +17,7 @@ function MovieCard({ movie, isContinueWatching = false }) {
     const [isHovered, setIsHovered] = useState(false)
     const [cardRect, setCardRect] = useState(null)
     const [inList, setInList] = useState(false)
+    const [inFavorites, setInFavorites] = useState(false)
     const [showTrailer, setShowTrailer] = useState(false)
     const timeoutRef = useRef(null)
     const cardRef = useRef(null)
@@ -28,6 +29,8 @@ function MovieCard({ movie, isContinueWatching = false }) {
         if (!movie) return
         const watchlist = JSON.parse(localStorage.getItem('playmon_watchlist') || '[]')
         setInList(watchlist.some(m => m.id === movie.id))
+        const favorites = JSON.parse(localStorage.getItem('playmon_favorites') || '[]')
+        setInFavorites(favorites.some(m => m.id === movie.id))
     }, [movie])
 
     const handleToggleList = (e) => {
@@ -37,10 +40,28 @@ function MovieCard({ movie, isContinueWatching = false }) {
         if (inList) {
             localStorage.setItem('playmon_watchlist', JSON.stringify(watchlist.filter(m => m.id !== movie.id)))
             setInList(false)
+            window.dispatchEvent(new CustomEvent('playmon:watchlist-changed', { detail: { action: 'remove', item: movie } }))
         } else {
             watchlist.push(movie)
             localStorage.setItem('playmon_watchlist', JSON.stringify(watchlist))
             setInList(true)
+            window.dispatchEvent(new CustomEvent('playmon:watchlist-changed', { detail: { action: 'add', item: movie } }))
+        }
+    }
+
+    const handleToggleFavorites = (e) => {
+        e.stopPropagation()
+        if (!movie) return
+        const favorites = JSON.parse(localStorage.getItem('playmon_favorites') || '[]')
+        if (inFavorites) {
+            localStorage.setItem('playmon_favorites', JSON.stringify(favorites.filter(m => m.id !== movie.id)))
+            setInFavorites(false)
+            window.dispatchEvent(new CustomEvent('playmon:favorites-changed', { detail: { action: 'remove', item: movie } }))
+        } else {
+            favorites.push(movie)
+            localStorage.setItem('playmon_favorites', JSON.stringify(favorites))
+            setInFavorites(true)
+            window.dispatchEvent(new CustomEvent('playmon:favorites-changed', { detail: { action: 'add', item: movie } }))
         }
     }
 
@@ -161,10 +182,15 @@ function MovieCard({ movie, isContinueWatching = false }) {
                             <HiFilm className="text-lg" />
                         </button>
                     )}
-                    <button onClick={handleToggleList} title={inList ? "Eliminar de la llista" : "Afegir a llista"} 
-                            className={`flex items-center justify-center p-2 rounded-full text-white transition-colors border 
+                    <button onClick={handleToggleList} title={inList ? "Eliminar de la llista" : "Afegir a veure més tard"}
+                            className={`flex items-center justify-center p-2 rounded-full text-white transition-colors border
                                        ${inList ? 'bg-[#CC8400] border-[#CC8400]' : 'bg-white/10 hover:bg-white/20 border-white/20'}`}>
                         {inList ? <HiCheck className="text-lg" /> : <HiPlus className="text-lg" />}
+                    </button>
+                    <button onClick={handleToggleFavorites} title={inFavorites ? "Eliminar de favorits" : "Afegir a favorits"}
+                            className={`flex items-center justify-center p-2 rounded-full text-white transition-colors border
+                                       ${inFavorites ? 'bg-yellow-500/80 border-yellow-500' : 'bg-white/10 hover:bg-white/20 border-white/20'}`}>
+                        <HiStar className="text-lg" />
                     </button>
                 </div>
 

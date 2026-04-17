@@ -19,6 +19,7 @@ import ComptePrivadesa from "@/features/compte/perfil/pages/compte/ComptePrivade
 import CompteLlista from "@/features/compte/perfil/pages/compte/CompteLlista.jsx";
 import CompteHistorial from "@/features/compte/perfil/pages/compte/CompteHistorial.jsx";
 import ComptePagaments from "@/features/compte/perfil/pages/compte/ComptePagaments.jsx";
+import CompteFavorits from "@/features/compte/perfil/pages/compte/CompteFavorits.jsx";
 import NotFound from '@/features/NotFound/NotFound.jsx';
 import Forbidden from '@/features/Forbidden/Forbidden.jsx';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
@@ -70,6 +71,7 @@ const App = () => {
             <Route path="llista" element={<CompteLlista />} />
             <Route path="historial" element={<CompteHistorial />} />
             <Route path="pagaments" element={<ComptePagaments />} />
+            <Route path="favorits" element={<CompteFavorits />} />
           </Route>
 
           <Route path="/login"
